@@ -4,7 +4,7 @@
       <span class="app-brand-logo demo">
         <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt=" Logo" width="36" class="me-1">
       </span>
-      <span class="app-brand-text demo menu-text fw-bold ms-1 fs-6">Desa Jenangan</span>
+  <span class="app-brand-text demo menu-text fw-bold ms-1 fs-5">Desa Jenangan</span>
     </a>
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
       <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
@@ -14,11 +14,11 @@
   <div class="menu-inner-shadow"></div>
 
   <ul class="menu-inner py-1">
-    <!-- Dashboards -->
+    <!-- Dashboard -->
     <li class="menu-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-  <a href="#" class="menu-link">
+  <a href="{{ route('admin.dashboard') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-home"></i>
-        <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
+        <div class="text-truncate" data-i18n="Dashboard">Dashboard</div>
       </a>
     </li>
 
