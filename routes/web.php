@@ -65,6 +65,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('hero_banner', \App\Http\Controllers\Admin\HeroBannerController::class)->except(['show', 'create', 'edit']);
     // Logos CRUD routes
     Route::resource('logos', \App\Http\Controllers\Admin\LogoController::class)->except(['show', 'create', 'edit']);
+    // Data Penduduk CRUD routes
+    Route::resource('data_penduduk', \App\Http\Controllers\Admin\DataPendudukController::class)->except(['show', 'create', 'edit']);
 });
 
 // Profile routes
