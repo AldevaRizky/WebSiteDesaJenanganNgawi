@@ -2,9 +2,9 @@
   <div class="app-brand demo">
   <a href="#" class="app-brand-link">
       <span class="app-brand-logo demo">
-        <img src="{{ asset('assets/img/logo/83790f2b43f00be.png') }}" alt=" Logo" width="50">
+        <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt=" Logo" width="36" class="me-1">
       </span>
-      <span class="app-brand-text demo menu-text fw-bold ms-2">Sekolahku</span>
+      <span class="app-brand-text demo menu-text fw-bold ms-1 fs-6">Desa Jenangan</span>
     </a>
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
       <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
@@ -28,7 +28,17 @@
     </li>
 
     <!-- Layouts Section -->
-    <li class="menu-item {{ request()->routeIs('heroes.*', 'hero_banner.*', 'logos.*', 'dataSekolah.*', 'sejarah_sekolah.*', 'sambutan_kepala_sekolah.*', 'visi_misi.*', 'fasilitaslayouts.*', 'footer.*') ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->routeIs(
+        'heroes.*', 'admin.heroes.*',
+        'hero_banner.*', 'admin.hero_banner.*',
+        'logos.*', 'admin.logos.*',
+        'dataSekolah.*', 'admin.dataSekolah.*',
+        'sejarah_sekolah.*', 'admin.sejarah_sekolah.*',
+        'sambutan_kepala_sekolah.*', 'admin.sambutan_kepala_sekolah.*',
+        'visi_misi.*', 'admin.visi_misi.*',
+        'fasilitaslayouts.*', 'admin.fasilitaslayouts.*',
+        'footer.*', 'admin.footer.*'
+      ) ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-layout"></i>
         <div class="text-truncate" data-i18n="Layouts">Layouts</div>
@@ -113,7 +123,12 @@
     </li>
 
     <!-- PPDB -->
-    <li class="menu-item {{ request()->routeIs('periodes*', 'gelombangs*', 'formulir_pendaftaran*', 'users.ppdb*' ) ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->routeIs(
+        'periodes*', 'admin.periodes*',
+        'gelombangs*', 'admin.gelombangs*',
+        'formulir_pendaftaran*', 'admin.formulir_pendaftaran*',
+        'users.ppdb*', 'admin.users.ppdb*'
+      ) ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-group"></i>
         <div class="text-truncate" data-i18n="Layouts">PPDB</div>
@@ -150,7 +165,16 @@
     </li>
 
     <!-- MasterData -->
-    <li class="menu-item {{ request()->routeIs('gurus*', 'siswas*', 'academic_years*', 'classes*', 'subjects*', 'schedules*', 'class-students*', 'attendances*' ) ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->routeIs(
+        'gurus*', 'admin.gurus*',
+        'siswas*', 'admin.siswas*',
+        'academic_years*', 'admin.academic_years*',
+        'classes*', 'admin.classes*',
+        'subjects*', 'admin.subjects*',
+        'schedules*', 'admin.schedules*',
+        'class-students*', 'admin.class-students*',
+        'attendances*', 'admin.attendances*'
+      ) ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-data"></i>
         <div class="text-truncate" data-i18n="Layouts">Master Data</div>
