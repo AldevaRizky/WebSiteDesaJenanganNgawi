@@ -42,7 +42,7 @@
                                 <th>Aksi</th>
                                 <td>
                                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editHeroBannerModal">Edit</button>
-                                    <form action="{{ route('hero_banner.destroy', $heroBanner->id) }}" method="POST" class="d-inline delete-form">
+                                    <form action="{{ route('admin.hero_banner.destroy', $heroBanner->id) }}" method="POST" class="d-inline delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm btn-delete">Hapus</button>
@@ -62,7 +62,7 @@
 <!-- Modal Tambah -->
 <div class="modal fade" id="addHeroBannerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('hero_banner.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.hero_banner.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -91,7 +91,7 @@
 @if ($heroBanner)
 <div class="modal fade" id="editHeroBannerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('hero_banner.update', $heroBanner->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.hero_banner.update', $heroBanner->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="modal-content">
