@@ -55,8 +55,8 @@
             <div class="text-truncate" data-i18n="Hero Banner">Hero Banner</div>
           </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('logos.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.logos.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.logos.index') }}" class="menu-link">
             <div class="text-truncate" data-i18n="Logo">Logo</div>
           </a>
         </li>
