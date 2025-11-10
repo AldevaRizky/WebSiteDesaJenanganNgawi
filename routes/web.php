@@ -63,6 +63,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('heroes', \App\Http\Controllers\Admin\HeroController::class)->except(['show', 'create', 'edit']);
     // Hero Banner routes
     Route::resource('hero_banner', \App\Http\Controllers\Admin\HeroBannerController::class)->except(['show', 'create', 'edit']);
+    // Logos CRUD routes
+    Route::resource('logos', \App\Http\Controllers\Admin\LogoController::class)->except(['show', 'create', 'edit']);
 });
 
 // Profile routes
