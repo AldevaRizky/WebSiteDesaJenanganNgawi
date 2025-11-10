@@ -1,15 +1,15 @@
 @extends('layouts.landing')
 
-@section('title', 'Sekolah Berprestasi')
+@section('title', 'Desa Jenangan')
 
 @section('content')
         <!-- Hero Section -->
         <header class="hero relative">
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1 class="text-3xl md:text-6xl font-bold mb-4">Selamat Datang di</h1>
-                <span class="text-5xl text-blue-400 font-bold">Sekolah <span class="text-blue-600">Berprestasi</span></span>
-                <p class="text-lg md:text-2xl mt-4">Membangun Generasi Cerdas dan Berkarakter</p>
+                <h1 class="text-3xl md:text-6xl font-bold mb-4">Selamat Datang</h1>
+                <span class="text-5xl text-blue-400 font-bold">Website Desa <span class="text-blue-600">Jenangan</span></span>
+                <p class="text-lg md:text-2xl mt-4">Sumber Informasi Terbaru Tentang Pemerintahan di Desa Jenangan</p>
             </div>
             <div id="hero-images" class="hero-images absolute top-0 left-0 w-full h-full">
                 @foreach ($heroes as $hero)

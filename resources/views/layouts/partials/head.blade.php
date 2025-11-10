@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Favicon -->
 <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
-<title>@yield('title', 'Sekolahku')</title>
+<title>@yield('title', 'Website Desa Jenangan')</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/scrollreveal"></script>
@@ -194,38 +194,5 @@
     }
 </style>
 <!-- Countdown Timer Script -->
-<script>
-    // Countdown Timer Script
-    function startCountdown(targetDate) {
-        const countdownElement = document.getElementById('countdown');
-        const target = new Date(targetDate).getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = target - now;
-
-            if (distance < 0) {
-                countdownElement.innerHTML = "PPDB Telah Dimulai!";
-                clearInterval(interval);
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdownElement.innerHTML = `
-                <span class="text-2xl font-bold">${days}</span> Hari
-                <span class="text-2xl font-bold">${hours}</span> Jam
-                <span class="text-2xl font-bold">${minutes}</span> Menit
-                <span class="text-2xl font-bold">${seconds}</span> Detik
-            `;
-        }
-
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-    }
-  </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>

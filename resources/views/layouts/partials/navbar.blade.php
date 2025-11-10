@@ -1,9 +1,9 @@
 <!-- Navigation Bar -->
 <nav id="navbar" class="navbar transparent py-5 px-6 flex justify-between items-center text-white">
     <div class="flex items-center">
-        <img src="{{ asset('assets/img/logo/83790f2b43f00be.png') }}"
-             alt="Logo Sekolah" class="navbar-logo-img w-12 h-12 mr-3">
-        <h1 class="navbar-logo text-xl font-bold large">Sekolah Berprestasi</h1>
+        <img src="{{ asset('assets/img/logo/ngawi.png') }}"
+             alt="Logo Kabupaten Ngawi" class="navbar-logo-img w-12 h-12 mr-3">
+        <h1 class="navbar-logo text-xl font-bold large">Desa Jenangan</h1>
     </div>
 
     <!-- Menu List -->
@@ -21,12 +21,12 @@
             </a>
             <div class="dropdown-menu">
                 <a href="#"
-                   class="{{ Request::is('tentang-kami/sejarah-sekolah') ? 'active' : '' }}">
-                   Sejarah Sekolah
+                   class="{{ Request::is('tentang-kami/sejarah-desa') ? 'active' : '' }}">
+                   Sejarah Desa
                 </a>
                 <a href="#"
                    class="{{ Request::is('tentang-kami/sambutan') ? 'active' : '' }}">
-                   Sambutan Kepala Sekolah
+                   Sambutan Kepala Desa
                 </a>
                 <a href="#"
                    class="{{ Request::is('tentang-kami/visi-misi') ? 'active' : '' }}">
@@ -40,26 +40,14 @@
         </li>
         <li>
             <a href="#"
-               class="navbar-text hover:text-blue-400 large {{ Request::is('ekstrakurikuler') ? 'active' : '' }}">
-               Ekstrakurikuler
-            </a>
-        </li>
-        <li>
-            <a href="#"
                class="navbar-text hover:text-blue-400 large {{ Request::is('berita') ? 'active' : '' }}">
                Berita
             </a>
         </li>
-        <li>
+                <li>
             <a href="#"
-               class="navbar-text hover:text-blue-400 large {{ Request::is('prestasi') ? 'active' : '' }}">
-               Prestasi
-            </a>
-        </li>
-        <li>
-            <a href="#"
-               class="navbar-text hover:text-blue-400 large {{ Request::is('ppdb') ? 'active' : '' }}">
-               PPDB
+               class="navbar-text hover:text-blue-400 large {{ Request::is('infografis') ? 'active' : '' }}">
+               Infografis
             </a>
         </li>
     </ul>
