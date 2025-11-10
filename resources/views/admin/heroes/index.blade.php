@@ -64,7 +64,10 @@
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <label for="editHeroCover{{ $hero->id }}" class="form-label">Hero Cover</label>
-                                                <input type="file" class="form-control" id="editHeroCover{{ $hero->id }}" name="cover">
+                                                <input type="file" class="form-control hero-file-input" id="editHeroCover{{ $hero->id }}" name="cover" data-preview="editHeroPreview{{ $hero->id }}">
+                                                <div class="mt-2">
+                                                    <img id="editHeroPreview{{ $hero->id }}" src="{{ Storage::url($hero->cover) }}" alt="Current cover" class="img-fluid" style="max-width: 300px;" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -100,7 +103,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="addHeroCover" class="form-label">Hero Cover</label>
-                        <input type="file" class="form-control" id="addHeroCover" name="cover" required>
+                        <input type="file" class="form-control hero-file-input" id="addHeroCover" name="cover" data-preview="addHeroPreview" required>
+                        <div class="mt-2">
+                            <img id="addHeroPreview" src="#" alt="Preview" class="img-fluid" style="max-width: 300px; display: none;" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -111,5 +117,55 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Store original src for edit previews so we can revert if needed
+    document.querySelectorAll('img[id^="editHeroPreview"]').forEach(function(img){
+        img.dataset.originalSrc = img.src || '';
+    });
+
+    // Handle file input changes for all hero file inputs
+    document.querySelectorAll('.hero-file-input').forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            var previewId = input.dataset.preview;
+            if (!previewId) return;
+            var preview = document.getElementById(previewId);
+            if (!preview) return;
+            var file = input.files && input.files[0];
+            if (file) {
+                // Show selected file
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = '';
+            } else {
+                // No file chosen: for edit previews revert to original, for add hide
+                if (preview.dataset.originalSrc) {
+                    preview.src = preview.dataset.originalSrc;
+                    preview.style.display = preview.dataset.originalSrc ? '' : 'none';
+                } else {
+                    preview.src = '#';
+                    preview.style.display = 'none';
+                }
+            }
+        });
+    });
+
+    // Reset Add modal preview when closed
+    var addModal = document.getElementById('addHeroModal');
+    if (addModal) {
+        addModal.addEventListener('hidden.bs.modal', function () {
+            var preview = document.getElementById('addHeroPreview');
+            var input = document.getElementById('addHeroCover');
+            if (preview) {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+            if (input) {
+                input.value = '';
+            }
+        });
+    }
+});
+</script>
 
 @endsection
