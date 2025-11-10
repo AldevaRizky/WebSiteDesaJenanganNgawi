@@ -26,7 +26,7 @@ class HeroBannerController extends Controller
 
         // Cek apakah data sudah ada
         if (HeroBanner::count() > 0) {
-            return redirect()->route('hero_banner.index')->withErrors('Hero Banner sudah ada. Anda hanya dapat mengedit data.');
+            return redirect()->route('admin.hero_banner.index')->withErrors('Hero Banner sudah ada. Anda hanya dapat mengedit data.');
         }
 
         // Simpan file gambar
@@ -37,7 +37,7 @@ class HeroBannerController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('hero_banner.index')->with('success', 'Hero Banner berhasil ditambahkan!');
+    return redirect()->route('admin.hero_banner.index')->with('success', 'Hero Banner berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
@@ -58,7 +58,7 @@ class HeroBannerController extends Controller
         // Update data lainnya
         $heroBanner->save();
 
-        return redirect()->route('hero_banner.index')->with('success', 'Hero Banner berhasil diperbarui!');
+    return redirect()->route('admin.hero_banner.index')->with('success', 'Hero Banner berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -67,6 +67,6 @@ class HeroBannerController extends Controller
         Storage::delete($heroBanner->image);
         $heroBanner->delete();
 
-        return redirect()->route('hero_banner.index')->with('success', 'Hero Banner berhasil dihapus!');
+    return redirect()->route('admin.hero_banner.index')->with('success', 'Hero Banner berhasil dihapus!');
     }
 }
