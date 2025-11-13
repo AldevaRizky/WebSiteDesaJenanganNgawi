@@ -32,7 +32,7 @@
         'heroes.*', 'admin.heroes.*',
         'hero_banner.*', 'admin.hero_banner.*',
         'logos.*', 'admin.logos.*',
-        'dataSekolah.*', 'admin.dataSekolah.*',
+        'data_penduduk.*', 'admin.data_penduduk.*',
         'sejarah_sekolah.*', 'admin.sejarah_sekolah.*',
         'sambutan_kepala_sekolah.*', 'admin.sambutan_kepala_sekolah.*',
         'visi_misi.*', 'admin.visi_misi.*',
@@ -55,14 +55,14 @@
             <div class="text-truncate" data-i18n="Hero Banner">Hero Banner</div>
           </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin.data_penduduk.*') ? 'active' : '' }}">
-          <a href="{{ route('admin.data_penduduk.index') }}" class="menu-link">
-            <div class="text-truncate" data-i18n="Data Penduduk">Data Penduduk</div>
-          </a>
-        </li>
         <li class="menu-item {{ request()->routeIs('admin.logos.*') ? 'active' : '' }}">
           <a href="{{ route('admin.logos.index') }}" class="menu-link">
             <div class="text-truncate" data-i18n="Logo">Logo</div>
+          </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('admin.data_penduduk.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.data_penduduk.index') }}" class="menu-link">
+            <div class="text-truncate" data-i18n="Data Penduduk">Data Penduduk</div>
           </a>
         </li>
         <li class="menu-item {{ request()->routeIs('dataSekolah.index') ? 'active' : '' }}">
