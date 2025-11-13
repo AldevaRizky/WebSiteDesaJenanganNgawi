@@ -71,6 +71,12 @@
           </a>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('admin.sambutan_kepala_desa.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.sambutan_kepala_desa.index') }}" class="menu-link">
+            <div class="text-truncate" data-i18n="Sambutan Kepala Desa">Sambutan Kepala Desa</div>
+          </a>
+        </li>
+
         <li class="menu-item {{ request()->routeIs('sambutan_kepala_sekolah.index') ? 'active' : '' }}">
           <a href="#" class="menu-link">
             <div class="text-truncate" data-i18n="Sambutan Kepala Sekolah">Sambutan Kepala Sekolah</div>
