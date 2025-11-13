@@ -34,7 +34,7 @@
         'logos.*', 'admin.logos.*',
         'data_penduduk.*', 'admin.data_penduduk.*',
         'sejarah_desa.*', 'admin.sejarah_desa.*',
-        'sambutan_kepala_sekolah.*', 'admin.sambutan_kepala_sekolah.*',
+        'sambutan_kepala_desa.*', 'admin.sambutan_kepala_desa.*',
         'visi_misi.*', 'admin.visi_misi.*',
         'fasilitaslayouts.*', 'admin.fasilitaslayouts.*',
         'footer.*', 'admin.footer.*'
