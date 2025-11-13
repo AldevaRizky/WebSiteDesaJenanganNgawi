@@ -65,6 +65,11 @@
             <div class="text-truncate" data-i18n="Data Penduduk">Data Penduduk</div>
           </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('admin.sejarah_desa.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.sejarah_desa.index') }}" class="menu-link">
+            <div class="text-truncate" data-i18n="Sejarah Desa">Sejarah Desa</div>
+          </a>
+        </li>
 
         <li class="menu-item {{ request()->routeIs('sejarah_sekolah.index') ? 'active' : '' }}">
           <a href="#" class="menu-link">
