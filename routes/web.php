@@ -73,6 +73,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('sambutan_kepala_desa', \App\Http\Controllers\Admin\SambutanKepalaDesaController::class)->except(['show', 'create', 'edit']);
     // Visi & Misi CRUD routes
     Route::resource('visi_misi', \App\Http\Controllers\Admin\VisiMisiController::class)->except(['show', 'create', 'edit']);
+    // Footer CRUD routes
+    Route::resource('footer', \App\Http\Controllers\Admin\FooterController::class)->except(['show', 'create', 'edit']);
 });
 
 // Profile routes
