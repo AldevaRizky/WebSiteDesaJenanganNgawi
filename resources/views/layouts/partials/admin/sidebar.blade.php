@@ -33,7 +33,7 @@
         'hero_banner.*', 'admin.hero_banner.*',
         'logos.*', 'admin.logos.*',
         'data_penduduk.*', 'admin.data_penduduk.*',
-        'sejarah_sekolah.*', 'admin.sejarah_sekolah.*',
+        'sejarah_desa.*', 'admin.sejarah_desa.*',
         'sambutan_kepala_sekolah.*', 'admin.sambutan_kepala_sekolah.*',
         'visi_misi.*', 'admin.visi_misi.*',
         'fasilitaslayouts.*', 'admin.fasilitaslayouts.*',
@@ -71,11 +71,6 @@
           </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('sejarah_sekolah.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
-            <div class="text-truncate" data-i18n="Sejarah Sekolah">Sejarah Sekolah</div>
-          </a>
-        </li>
         <li class="menu-item {{ request()->routeIs('sambutan_kepala_sekolah.index') ? 'active' : '' }}">
           <a href="#" class="menu-link">
             <div class="text-truncate" data-i18n="Sambutan Kepala Sekolah">Sambutan Kepala Sekolah</div>
