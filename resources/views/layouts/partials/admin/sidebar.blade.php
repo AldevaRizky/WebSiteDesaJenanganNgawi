@@ -82,11 +82,12 @@
           </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('footer.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.footer.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.footer.index') }}" class="menu-link">
             <div class="text-truncate" data-i18n="Footer">Footer</div>
           </a>
         </li>
+
       </ul>
     </li>
 
