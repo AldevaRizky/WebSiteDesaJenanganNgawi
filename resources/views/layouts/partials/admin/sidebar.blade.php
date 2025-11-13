@@ -77,11 +77,6 @@
           </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('sambutan_kepala_sekolah.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
-            <div class="text-truncate" data-i18n="Sambutan Kepala Sekolah">Sambutan Kepala Sekolah</div>
-          </a>
-        </li>
         <li class="menu-item {{ request()->routeIs('visi_misi.index') ? 'active' : '' }}">
           <a href="#" class="menu-link">
             <div class="text-truncate" data-i18n="Visi&Misi">Visi & Misi</div>
