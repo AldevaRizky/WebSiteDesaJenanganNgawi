@@ -69,6 +69,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('data_penduduk', \App\Http\Controllers\Admin\DataPendudukController::class)->except(['show', 'create', 'edit']);
     // Sejarah Desa CRUD routes
     Route::resource('sejarah_desa', \App\Http\Controllers\Admin\SejarahDesaController::class)->except(['show', 'create', 'edit']);
+    // Sambutan Kepala Desa CRUD routes
+    Route::resource('sambutan_kepala_desa', \App\Http\Controllers\Admin\SambutanKepalaDesaController::class)->except(['show', 'create', 'edit']);
 });
 
 // Profile routes
