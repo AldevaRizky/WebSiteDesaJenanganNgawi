@@ -92,7 +92,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="gambar" class="form-label">Gambar</label>
-                        <input type="file" class="form-control" id="gambar" name="gambar" required>
+                        <input type="file" class="form-control sambutan-file-input" id="addSambutanGambar" name="gambar" data-preview="addSambutanPreview" required accept="image/*">
+                        <div class="mt-2">
+                            <img id="addSambutanPreview" src="#" alt="Preview" class="img-fluid" style="max-width: 300px; display: none;" />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
@@ -131,7 +134,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="gambar" class="form-label">Gambar</label>
-                        <input type="file" class="form-control" id="gambar" name="gambar">
+                        <input type="file" class="form-control sambutan-file-input" id="editSambutanGambar" name="gambar" data-preview="editSambutanPreview" accept="image/*">
+                        <div class="mt-2">
+                            <img id="editSambutanPreview" src="{{ Storage::url($sambutan->gambar) }}" alt="Current Image" class="img-fluid" style="max-width: 300px;" />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
@@ -147,5 +153,44 @@
     </div>
 </div>
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var editPreview = document.getElementById('editSambutanPreview');
+    if (editPreview) editPreview.dataset.originalSrc = editPreview.src || '';
+
+    document.querySelectorAll('.sambutan-file-input').forEach(function (input) {
+        input.addEventListener('change', function () {
+            var previewId = input.dataset.preview;
+            if (!previewId) return;
+            var preview = document.getElementById(previewId);
+            if (!preview) return;
+            var file = input.files && input.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = '';
+            } else {
+                if (preview.dataset.originalSrc) {
+                    preview.src = preview.dataset.originalSrc;
+                    preview.style.display = preview.dataset.originalSrc ? '' : 'none';
+                } else {
+                    preview.src = '#';
+                    preview.style.display = 'none';
+                }
+            }
+        });
+    });
+
+    var addModal = document.getElementById('addSambutanModal');
+    if (addModal) {
+        addModal.addEventListener('hidden.bs.modal', function () {
+            var preview = document.getElementById('addSambutanPreview');
+            var input = document.getElementById('addSambutanGambar');
+            if (preview) { preview.src = '#'; preview.style.display = 'none'; }
+            if (input) input.value = '';
+        });
+    }
+});
+</script>
 
 @endsection
