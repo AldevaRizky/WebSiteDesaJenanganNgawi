@@ -36,7 +36,6 @@
         'sejarah_desa.*', 'admin.sejarah_desa.*',
         'sambutan_kepala_desa.*', 'admin.sambutan_kepala_desa.*',
         'visi_misi.*', 'admin.visi_misi.*',
-        'fasilitaslayouts.*', 'admin.fasilitaslayouts.*',
         'footer.*', 'admin.footer.*'
       ) ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -77,16 +76,12 @@
           </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('visi_misi.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
-            <div class="text-truncate" data-i18n="Visi&Misi">Visi & Misi</div>
+        <li class="menu-item {{ request()->routeIs('admin.visi_misi.*') ? 'active' : '' }}">
+          <a href="{{ route('admin.visi_misi.index') }}" class="menu-link">
+            <div class="text-truncate" data-i18n="Visi & Misi">Visi & Misi</div>
           </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('fasilitaslayouts.index') ? 'active' : '' }}">
-          <a href="#" class="menu-link">
-            <div class="text-truncate" data-i18n="Fasilitas">Fasilitas</div>
-          </a>
-        </li>
+
         <li class="menu-item {{ request()->routeIs('footer.index') ? 'active' : '' }}">
           <a href="#" class="menu-link">
             <div class="text-truncate" data-i18n="Footer">Footer</div>
