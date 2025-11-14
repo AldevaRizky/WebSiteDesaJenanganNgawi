@@ -41,7 +41,7 @@
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-layout"></i>
         <div class="text-truncate" data-i18n="Layouts">Layouts</div>
-        <span class="badge rounded-pill bg-danger ms-auto">9</span>
+        <span class="badge rounded-pill bg-danger ms-auto">8</span>
       </a>
       <ul class="menu-sub">
         <li class="menu-item {{ request()->routeIs('admin.heroes.*') ? 'active' : '' }}">
