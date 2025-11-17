@@ -105,7 +105,7 @@
         <!-- News Category -->
         <li class="menu-item {{ request()->routeIs('admin.kategori_berita.index') ? 'active' : '' }}">
             <a href="{{ route('admin.kategori_berita.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-news"></i>
+                <i class="menu-icon tf-icons bx bx-category"></i>
                 <div class="text-truncate" data-i18n="News">Kategori Berita</div>
             </a>
         </li>
