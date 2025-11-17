@@ -64,18 +64,20 @@
                                         <div class="position-relative">
                                             <img src="{{ Storage::url($image->path) }}"
                                                  style="width:70px;height:70px;object-fit:cover;border-radius:5px;">
-                                            <form action="{{ route('admin.berita_images.destroy', $image->id) }}"
-                                                  method="POST"
-                                                  class="position-absolute top-0 end-0">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        onclick="return confirm('Hapus gambar ini?')"
-                                                        class="btn btn-sm btn-danger py-0 px-1"
-                                                        style="font-size:10px;">
-                                                    X
-                                                </button>
-                                            </form>
+                                            @if(Route::has('admin.berita_images.destroy'))
+                                                <form action="{{ route('admin.berita_images.destroy', $image->id) }}"
+                                                      method="POST"
+                                                      class="position-absolute top-0 end-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            onclick="return confirm('Hapus gambar ini?')"
+                                                            class="btn btn-sm btn-danger py-0 px-1"
+                                                            style="font-size:10px;">
+                                                        X
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
@@ -170,7 +172,7 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button class="btn btn-warning" type="submit">Perbarui</button>
+                                            <button class="btn btn-warning me-2" type="submit">Perbarui</button>
                                             <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                                         </div>
 
@@ -249,7 +251,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-primary">Simpan</button>
+                    <button class="btn btn-primary me-2">Simpan</button>
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
 
