@@ -75,6 +75,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('visi_misi', \App\Http\Controllers\Admin\VisiMisiController::class)->except(['show', 'create', 'edit']);
     // Footer CRUD routes
     Route::resource('footer', \App\Http\Controllers\Admin\FooterController::class)->except(['show', 'create', 'edit']);
+    // Kategori Berita CRUD
+    Route::resource('kategori_berita', \App\Http\Controllers\Admin\KategoriBeritaController::class)->except(['show', 'create', 'edit']);
+    // Berita CRUD
+    Route::resource('beritas', \App\Http\Controllers\Admin\BeritaController::class)->except(['show', 'create', 'edit']);
+    // Berita image delete
+    Route::delete('berita_images/{id}', [\App\Http\Controllers\Admin\BeritaImageController::class, 'destroy'])->name('admin.berita_images.destroy');
 });
 
 // Profile routes
