@@ -42,7 +42,6 @@
                         <tr>
                             <th>#</th>
                             <th>Nama Kategori</th>
-                            <th>Slug</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -52,7 +51,6 @@
                         <tr>
                             <td>{{ $loop->iteration + ($kategoris->currentPage() - 1) * $kategoris->perPage() }}</td>
                             <td>{{ $kategori->nama }}</td>
-                            <td>{{ $kategori->slug }}</td>
                             <td>
 
                                 {{-- Edit --}}
