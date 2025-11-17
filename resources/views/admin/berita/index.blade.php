@@ -67,12 +67,11 @@
                                             @if(Route::has('admin.berita_images.destroy'))
                                                 <form action="{{ route('admin.berita_images.destroy', $image->id) }}"
                                                       method="POST"
-                                                      class="position-absolute top-0 end-0">
+                                                      class="position-absolute top-0 end-0 berita-image-delete-form">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                            onclick="return confirm('Hapus gambar ini?')"
-                                                            class="btn btn-sm btn-danger py-0 px-1"
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-danger py-0 px-1 btn-image-delete"
                                                             style="font-size:10px;">
                                                         X
                                                     </button>
@@ -91,13 +90,12 @@
                                 </button>
 
                                 <form action="{{ route('admin.beritas.destroy', $berita->id) }}"
-                                      class="d-inline"
+                                      class="d-inline berita-delete-form"
                                       method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Yakin ingin menghapus berita ini?')">
+                                    <button type="button"
+                                        class="btn btn-danger btn-sm btn-delete">
                                         Hapus
                                     </button>
                                 </form>
@@ -262,4 +260,52 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle berita delete buttons
+            document.querySelectorAll('.btn-delete').forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    const form = btn.closest('.berita-delete-form');
+                    Swal.fire({
+                        title: 'Yakin?',
+                        text: 'Yakin ingin menghapus berita ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            // Handle berita image delete buttons
+            document.querySelectorAll('.btn-image-delete').forEach(function(btn){
+                btn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    const form = btn.closest('.berita-image-delete-form');
+                    Swal.fire({
+                        title: 'Hapus Gambar?',
+                        text: 'Gambar akan dihapus secara permanen.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Hapus',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 @endsection
