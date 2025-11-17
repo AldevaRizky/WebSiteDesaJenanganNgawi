@@ -11,9 +11,10 @@ class KategoriBeritaController extends Controller
 {
     public function index()
     {
-        $kategoris = KategoriBerita::orderBy('nama')->get();
+        $kategoris = KategoriBerita::orderBy('nama')->paginate(10);
         return view('admin.kategori_berita.index', compact('kategoris'));
     }
+
 
     public function store(Request $request)
     {
@@ -24,9 +25,9 @@ class KategoriBeritaController extends Controller
         $slug = Str::slug($request->nama);
         // ensure unique
         $count = KategoriBerita::where('slug', 'like', "$slug%")->count();
-        if ($count) $slug .= '-'.($count+1);
+        if ($count) $slug .= '-' . ($count + 1);
 
-        KategoriBerita::create([ 'nama' => $request->nama, 'slug' => $slug ]);
+        KategoriBerita::create(['nama' => $request->nama, 'slug' => $slug]);
 
         return redirect()->route('admin.kategori_berita.index')->with('success', 'Kategori berhasil ditambahkan');
     }
