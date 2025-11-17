@@ -14,7 +14,7 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        $beritas = Berita::with('kategori','images')->orderByDesc('created_at')->get();
+        $beritas = Berita::with('kategori','images')->orderByDesc('created_at')->paginate(10);
         $kategoris = KategoriBerita::orderBy('nama')->get();
         return view('admin.berita.index', compact('beritas','kategoris'));
     }
