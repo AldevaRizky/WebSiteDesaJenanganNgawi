@@ -111,8 +111,8 @@
         </li>
 
         <!-- News -->
-        <li class="menu-item {{ request()->routeIs('admin.beritas.index') ? 'active' : '' }}">
-            <a href="{{ route('admin.beritas.index') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.berita.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-news"></i>
                 <div class="text-truncate" data-i18n="News">Berita</div>
             </a>
