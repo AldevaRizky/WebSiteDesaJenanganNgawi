@@ -14,9 +14,13 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        $beritas = Berita::with('kategori','images')->orderByDesc('created_at')->paginate(10);
+        $beritas = Berita::with(['kategori', 'images'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
         $kategoris = KategoriBerita::orderBy('nama')->get();
-        return view('admin.berita.index', compact('beritas','kategoris'));
+        
+        return view('admin.berita.index', compact('beritas', 'kategoris'));
     }
 
     public function store(Request $request)
@@ -26,13 +30,15 @@ class BeritaController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'konten' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Generate unique slug
         $slug = Str::slug($request->judul);
-        $count = Berita::where('slug','like',"$slug%")->count();
-        if ($count) $slug .= '-'.($count+1);
+        $count = Berita::where('slug', 'like', "$slug%")->count();
+        if ($count) $slug .= '-' . ($count + 1);
 
+        // Create berita
         $berita = Berita::create([
             'kategori_id' => $request->kategori_id,
             'judul' => $request->judul,
@@ -41,14 +47,19 @@ class BeritaController extends Controller
             'konten' => $request->konten,
         ]);
 
+        // Handle multiple images
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('public/berita');
-                BeritaImage::create(['berita_id' => $berita->id, 'path' => $path]);
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('berita', 'public');
+                BeritaImage::create([
+                    'berita_id' => $berita->id,
+                    'path' => $path,
+                ]);
             }
         }
 
-        return redirect()->route('admin.beritas.index')->with('success','Berita berhasil ditambahkan');
+        return redirect()->route('admin.berita.index')
+            ->with('success', 'Berita berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)
@@ -58,10 +69,20 @@ class BeritaController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'konten' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $berita = Berita::findOrFail($id);
+
+        // Update slug only if title changed
+        if ($berita->judul !== $request->judul) {
+            $slug = Str::slug($request->judul);
+            $count = Berita::where('slug', 'like', "$slug%")
+                ->where('id', '!=', $id)
+                ->count();
+            if ($count) $slug .= '-' . ($count + 1);
+            $berita->slug = $slug;
+        }
 
         $berita->update([
             'kategori_id' => $request->kategori_id,
@@ -70,25 +91,42 @@ class BeritaController extends Controller
             'konten' => $request->konten,
         ]);
 
+        // Handle new images
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('public/berita');
-                BeritaImage::create(['berita_id' => $berita->id, 'path' => $path]);
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('berita', 'public');
+                BeritaImage::create([
+                    'berita_id' => $berita->id,
+                    'path' => $path,
+                ]);
             }
         }
 
-        return redirect()->route('admin.beritas.index')->with('success','Berita berhasil diperbarui');
+        return redirect()->route('admin.berita.index')
+            ->with('success', 'Berita berhasil diperbarui');
     }
 
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
-        // delete images files
-        foreach ($berita->images as $img) {
-            Storage::delete($img->path);
+
+        // Delete all images from storage
+        foreach ($berita->images as $image) {
+            Storage::disk('public')->delete($image->path);
         }
+
         $berita->delete();
 
-        return redirect()->route('admin.beritas.index')->with('success','Berita berhasil dihapus');
+        return redirect()->route('admin.berita.index')
+            ->with('success', 'Berita berhasil dihapus');
+    }
+
+    public function deleteImage($id)
+    {
+        $image = BeritaImage::findOrFail($id);
+        Storage::disk('public')->delete($image->path);
+        $image->delete();
+
+        return response()->json(['success' => true]);
     }
 }
