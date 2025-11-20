@@ -58,7 +58,7 @@
                             <td>
                                 <span class="badge bg-info">{{ $berita->kategori->nama ?? '-' }}</span>
                             </td>
-                            <td>{{ Str::limit($berita->deskripsi ?? '-', 50) }}</td>
+                            <td>{{ Str::limit(strip_tags($berita->deskripsi ?? '-'), 50) }}</td>
                             <td>
                                 @if($berita->images->count() > 0)
                                     <img src="{{ asset('storage/' . $berita->images->first()->path) }}" 
@@ -103,69 +103,6 @@
                             </td>
                         </tr>
 
-                        {{-- View Modal --}}
-                        <div class="modal fade" id="viewModal{{ $berita->id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Detail Berita</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <strong>Judul:</strong>
-                                            <p>{{ $berita->judul }}</p>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <strong>Kategori:</strong>
-                                            <p>{{ $berita->kategori->nama ?? '-' }}</p>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <strong>Deskripsi:</strong>
-                                            <p>{{ $berita->deskripsi ?? '-' }}</p>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <strong>Konten:</strong>
-                                            <div class="border p-3 bg-light" style="max-height: 300px; overflow-y: auto;">
-                                                {!! $berita->konten ?? '-' !!}
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <strong>Gambar:</strong>
-                                            <div class="row mt-2">
-                                                @forelse($berita->images as $image)
-                                                    <div class="col-md-3 mb-2">
-                                                        <img src="{{ asset('storage/' . $image->path) }}" 
-                                                             alt="Image" 
-                                                             class="img-fluid rounded"
-                                                             style="width: 100%; height: 150px; object-fit: cover;">
-                                                    </div>
-                                                @empty
-                                                    <p class="text-muted">Tidak ada gambar</p>
-                                                @endforelse
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <strong>Tanggal Dibuat:</strong>
-                                            <p>{{ $berita->created_at->format('d M Y H:i') }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                            Tutup
-                                        </button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                         @empty
                         <tr>
                             <td colspan="7" class="text-center">Tidak ada data berita</td>
@@ -176,6 +113,71 @@
                 </table>
             </div>
 
+            {{-- Modals --}}
+            @foreach ($beritas as $berita)
+            <div class="modal fade" id="viewModal{{ $berita->id }}" tabindex="-1" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Detail Berita</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <strong>Judul:</strong>
+                                <p>{{ $berita->judul }}</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Kategori:</strong>
+                                <p>{{ $berita->kategori->nama ?? '-' }}</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Deskripsi:</strong>
+                                <p>{{ strip_tags($berita->deskripsi ?? '-') }}</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Konten:</strong>
+                                <div class="border p-3 bg-light" style="max-height: 400px; overflow-y: auto;">
+                                    {!! $berita->konten ?? '<p class="text-muted">Tidak ada konten</p>' !!}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Gambar:</strong>
+                                <div class="row mt-2">
+                                    @forelse($berita->images as $image)
+                                        <div class="col-md-3 mb-2">
+                                            <img src="{{ asset('storage/' . $image->path) }}" 
+                                                 alt="Image" 
+                                                 class="img-fluid rounded"
+                                                 style="width: 100%; height: 150px; object-fit: cover;">
+                                        </div>
+                                    @empty
+                                        <p class="text-muted">Tidak ada gambar</p>
+                                    @endforelse
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Tanggal Dibuat:</strong>
+                                <p>{{ $berita->created_at->format('d M Y H:i') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
             {{-- Pagination --}}
             <div class="d-flex justify-content-center mt-5">
                 {{ $beritas->links() }}
@@ -184,6 +186,28 @@
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+    /* Style untuk konten CKEditor di modal */
+    .modal-body .border table {
+        width: 100% !important;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border-collapse: collapse;
+    }
+    .modal-body .border table td,
+    .modal-body .border table th {
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+    }
+    .modal-body .border img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
