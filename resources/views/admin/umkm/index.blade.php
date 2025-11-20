@@ -282,7 +282,7 @@
 @push('scripts')
 <script>
     // Handle remove existing images across modals (existing images stored in DB)
-    // Behavior: immediate removal like the create preview - append hidden delete_images[] and hide the image element
+    // Behavior: show confirmation, then append hidden delete_images[] and hide the image element
     document.querySelectorAll('.remove-existing-image').forEach(button => {
         button.addEventListener('click', function() {
             const imageId = this.getAttribute('data-image-id');
@@ -292,13 +292,26 @@
 
             if (!deletedImagesContainer) return;
 
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'delete_images[]';
-            input.value = imageId;
-            deletedImagesContainer.appendChild(input);
-            // hide immediately to match create preview UX
-            imageElement.style.display = 'none';
+            Swal.fire({
+                title: 'Hapus Gambar?',
+                text: "Gambar ini akan dihapus saat Anda menyimpan perubahan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'delete_images[]';
+                    input.value = imageId;
+                    deletedImagesContainer.appendChild(input);
+                    imageElement.style.display = 'none';
+                    Swal.fire('Ditandai untuk dihapus!', 'Gambar akan dihapus saat Anda menyimpan perubahan.', 'success');
+                }
+            });
         });
     });
 
