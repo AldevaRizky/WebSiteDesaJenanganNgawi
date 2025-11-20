@@ -77,6 +77,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('footer', \App\Http\Controllers\Admin\FooterController::class)->except(['show', 'create', 'edit']);
     // Kategori Berita CRUD
     Route::resource('kategori_berita', \App\Http\Controllers\Admin\KategoriBeritaController::class)->except(['show', 'create', 'edit']);
+    // UMKM CRUD routes
+    Route::resource('umkm', \App\Http\Controllers\Admin\UmkmController::class);
     // Berita CRUD
     Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
     // CKEditor image upload
