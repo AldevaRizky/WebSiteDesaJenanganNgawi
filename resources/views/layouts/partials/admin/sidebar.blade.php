@@ -126,6 +126,26 @@
             </a>
         </li>
 
+        <!-- Perangkat Desa -->
+        <li class="menu-item {{ request()->routeIs('admin.perangkat.*') || request()->routeIs('admin.perangkat.bagan') ? 'active' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-sitemap"></i>
+                <div class="text-truncate" data-i18n="Perangkat">Perangkat Desa</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('admin.perangkat.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.perangkat.index') }}" class="menu-link">
+                        <div class="text-truncate">List Perangkat</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('admin.perangkat.bagan') ? 'active' : '' }}">
+                    <a href="{{ route('admin.perangkat.bagan') }}" class="menu-link">
+                        <div class="text-truncate">Bagan Struktur</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <!-- Message -->
         <li class="menu-item {{ request()->routeIs('pesans.index') ? 'active' : '' }}">
             <a href="#" class="menu-link">
