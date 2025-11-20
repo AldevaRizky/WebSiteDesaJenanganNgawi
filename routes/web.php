@@ -79,6 +79,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('kategori_berita', \App\Http\Controllers\Admin\KategoriBeritaController::class)->except(['show', 'create', 'edit']);
     // UMKM CRUD routes
     Route::resource('umkm', \App\Http\Controllers\Admin\UmkmController::class);
+    // Perangkat Desa CRUD + bagan
+    // register bagan route before resource to avoid conflict with {perangkat} show route
+    Route::get('perangkat/bagan', [\App\Http\Controllers\Admin\PerangkatDesaController::class, 'bagan'])->name('perangkat.bagan');
+    Route::resource('perangkat', \App\Http\Controllers\Admin\PerangkatDesaController::class);
     // Berita CRUD
     Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
     // CKEditor image upload
