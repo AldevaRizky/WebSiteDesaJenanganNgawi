@@ -162,27 +162,27 @@ class BeritaController extends Controller
     // Upload image from CKEditor
     public function uploadImage(Request $request)
     {
-        $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
         if ($request->hasFile('upload')) {
-            $image = $request->file('upload');
-            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('ckeditor', $imageName, 'public');
-            $url = asset('storage/' . $path);
+            try {
+                $image = $request->file('upload');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('ckeditor', $imageName, 'public');
+                $url = asset('storage/' . $path);
 
-            return response()->json([
-                'uploaded' => true,
-                'url' => $url
-            ]);
+                // CKEditor 4 memerlukan format ini
+                $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+                $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', 'Image uploaded successfully');</script>";
+                
+                return response($response);
+            } catch (\Exception $e) {
+                $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+                $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '', 'Upload failed: " . $e->getMessage() . "');</script>";
+                return response($response);
+            }
         }
 
-        return response()->json([
-            'uploaded' => false,
-            'error' => [
-                'message' => 'Upload failed'
-            ]
-        ]);
+        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+        $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '', 'No file uploaded');</script>";
+        return response($response);
     }
 }
