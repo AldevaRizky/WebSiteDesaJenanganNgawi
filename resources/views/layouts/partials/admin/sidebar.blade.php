@@ -118,6 +118,14 @@
             </a>
         </li>
 
+        <!-- UMKM -->
+        <li class="menu-item {{ request()->routeIs('admin.umkm.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.umkm.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-store"></i>
+                <div class="text-truncate" data-i18n="UMKM">UMKM</div>
+            </a>
+        </li>
+
         <!-- Message -->
         <li class="menu-item {{ request()->routeIs('pesans.index') ? 'active' : '' }}">
             <a href="#" class="menu-link">
