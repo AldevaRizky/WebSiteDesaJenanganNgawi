@@ -87,7 +87,7 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-5">
                 {{ $umkms->links() }}
             </div>
 
@@ -128,11 +128,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Gambar (multiple)</label>
-                        <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                        <input type="file" name="images[]" class="form-control umkm-image-input" id="addUmkmImages" multiple accept="image/*">
+                        {{-- Image Preview for Add Modal --}}
+                        <div id="addImagePreview" class="mt-3 row"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
@@ -160,7 +162,7 @@
                         <div class="row mt-2">
                             @forelse($umkm->images as $image)
                                 <div class="col-md-3 mb-2">
-                                    <img src="{{ asset('storage/' . $image->path) }}" class="img-fluid rounded" style="width:100%;height:150px;object-fit:cover;">
+                                    <img src="{{ asset('storage/' . $image->path) }}" class="img-fluid rounded" style="width:100%;height:200px;object-fit:cover;">
                                 </div>
                             @empty
                                 <p class="text-muted">Tidak ada gambar</p>
@@ -213,8 +215,10 @@
                             <div class="row" id="existingImages{{ $umkm->id }}">
                                 @forelse($umkm->images as $image)
                                     <div class="col-md-3 mb-2" id="existing-image-{{ $image->id }}-umkm-{{ $umkm->id }}">
-                                        <img src="{{ asset('storage/' . $image->path) }}" class="img-fluid rounded" style="width:100%;height:120px;object-fit:cover;">
-                                        <button type="button" class="btn btn-danger btn-sm mt-1 remove-existing-image" data-image-id="{{ $image->id }}" data-umkm-id="{{ $umkm->id }}">Hapus</button>
+                                        <div class="image-preview-item">
+                                            <img src="{{ asset('storage/' . $image->path) }}" class="img-fluid rounded" style="width:100%;height:200px;object-fit:cover;">
+                                            <button type="button" class="remove-image remove-existing-image" title="Hapus gambar" data-image-id="{{ $image->id }}" data-umkm-id="{{ $umkm->id }}">&times;</button>
+                                        </div>
                                     </div>
                                 @empty
                                     <p class="text-muted">Tidak ada gambar</p>
@@ -225,11 +229,13 @@
 
                         <div class="mb-3">
                             <label class="form-label">Upload Gambar Baru (multiple)</label>
-                            <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                            <input type="file" name="images[]" class="form-control umkm-image-input" id="editUmkmImages{{ $umkm->id }}" multiple accept="image/*">
+                            {{-- Image Preview for Edit Modal (new uploads) --}}
+                            <div id="imagePreviewEdit{{ $umkm->id }}" class="mt-3 row"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-warning">Perbarui</button>
                     </div>
                 </div>
@@ -238,9 +244,45 @@
     </div>
 @endforeach
 
+@push('styles')
+<style>
+    .image-preview-item {
+        position: relative;
+        display: inline-block;
+    }
+    .image-preview-item img {
+        width: 200px;
+        height: 200px;
+        max-width: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        display: block;
+    }
+    .image-preview-item .remove-image {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: rgba(220,53,69,0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
-    // Handle remove existing images across modals
+    // Handle remove existing images across modals (existing images stored in DB)
+    // Behavior: immediate removal like the create preview - append hidden delete_images[] and hide the image element
     document.querySelectorAll('.remove-existing-image').forEach(button => {
         button.addEventListener('click', function() {
             const imageId = this.getAttribute('data-image-id');
@@ -248,29 +290,89 @@
             const imageElement = document.getElementById('existing-image-' + imageId + '-umkm-' + umkmId);
             const deletedImagesContainer = document.getElementById('deletedImagesContainer' + umkmId);
 
-            Swal.fire({
-                title: 'Hapus Gambar?',
-                text: "Gambar ini akan dihapus saat Anda menyimpan perubahan.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'delete_images[]';
-                    input.value = imageId;
-                    deletedImagesContainer.appendChild(input);
-                    imageElement.style.display = 'none';
-                    Swal.fire('Ditandai untuk dihapus!', 'Gambar akan dihapus saat Anda menyimpan perubahan.', 'success');
-                }
-            });
+            if (!deletedImagesContainer) return;
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'delete_images[]';
+            input.value = imageId;
+            deletedImagesContainer.appendChild(input);
+            // hide immediately to match create preview UX
+            imageElement.style.display = 'none';
         });
     });
+
+    // Client-side image preview + removable preview items for Add and Edit modals
+    (function() {
+        const inputs = document.querySelectorAll('.umkm-image-input');
+        const selectedFilesMap = new WeakMap();
+
+        inputs.forEach(input => {
+            // Determine preview container id
+            let previewId = null;
+            if (input.id === 'addUmkmImages') {
+                previewId = 'addImagePreview';
+            } else if (input.id && input.id.startsWith('editUmkmImages')) {
+                // input.id like editUmkmImages{ID}
+                const suffix = input.id.replace('editUmkmImages', '');
+                previewId = 'imagePreviewEdit' + suffix;
+            }
+
+            const previewContainer = previewId ? document.getElementById(previewId) : null;
+            if (!previewContainer) return;
+
+            selectedFilesMap.set(input, []);
+
+            input.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files).filter(f => f && f.type && f.type.startsWith('image/'));
+                selectedFilesMap.set(input, files);
+                renderPreviews(input, previewContainer);
+            });
+
+            function renderPreviews(inputEl, container) {
+                const files = selectedFilesMap.get(inputEl) || [];
+                container.innerHTML = '';
+
+                files.forEach((file, idx) => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-2 mb-2';
+
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'image-preview-item';
+
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.onload = function() { URL.revokeObjectURL(this.src); };
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'remove-image';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.title = 'Hapus preview';
+                    removeBtn.addEventListener('click', function() {
+                        const current = selectedFilesMap.get(inputEl) || [];
+                        current.splice(idx, 1);
+                        selectedFilesMap.set(inputEl, current);
+                        updateFileInput(inputEl, current);
+                        renderPreviews(inputEl, container);
+                    });
+
+                    previewItem.appendChild(img);
+                    previewItem.appendChild(removeBtn);
+                    col.appendChild(previewItem);
+                    container.appendChild(col);
+                });
+            }
+
+            function updateFileInput(inputEl, files) {
+                const dt = new DataTransfer();
+                files.forEach(f => dt.items.add(f));
+                inputEl.files = dt.files;
+            }
+        });
+    })();
 </script>
 @endpush
+
 
 @endsection
