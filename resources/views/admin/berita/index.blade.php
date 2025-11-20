@@ -129,14 +129,29 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Deskripsi Singkat</label>
+                                                <label class="form-label">Subjudul</label>
+                                                <input type="text" class="form-control" name="subjudul" value="{{ $berita->subjudul ?? '' }}">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label"></label>Deskripsi Singkat</label>
                                                 <textarea name="deskripsi" class="form-control" rows="3">{{ $berita->deskripsi }}</textarea>
                                                 <small class="text-muted">Ringkasan berita yang akan ditampilkan di list</small>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Konten Berita</label>
-                                                <textarea name="konten" class="tinymce-editor">{{ $berita->konten }}</textarea>
+
+                                                <div class="card p-2">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <div>
+                                                            <small class="text-muted">Gunakan toolbar editor untuk formatting (bold, italic, link).</small>
+                                                        </div>
+                                                        <div class="text-muted"><small><span class="editor-char-count">0</span> chars</small></div>
+                                                    </div>
+
+                                                    <textarea name="konten" class="tinymce-editor enhanced-editor">{{ $berita->konten }}</textarea>
+                                                </div>
                                             </div>
 
                                             {{-- Existing Images --}}
@@ -234,6 +249,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Subjudul</label>
+                        <input type="text" class="form-control" name="subjudul" value="{{ old('subjudul') }}">
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Deskripsi Singkat</label>
                         <textarea name="deskripsi" class="form-control" rows="3"></textarea>
                         <small class="text-muted">Ringkasan berita yang akan ditampilkan di list</small>
@@ -241,7 +261,17 @@
 
                     <div class="mb-3">
                         <label class="form-label">Konten Berita</label>
-                        <textarea name="konten" id="kontenAdd" class="tinymce-editor"></textarea>
+
+                        <div class="card p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <small class="text-muted">Masukkan konten berita di sini. Gunakan toolbar untuk <strong>bold</strong>, <em>italic</em> dan <a href="#">link</a>.</small>
+                                </div>
+                                <div class="text-muted"><small><span class="editor-char-count">0</span> chars</small></div>
+                            </div>
+
+                            <textarea name="konten" id="kontenAdd" class="tinymce-editor enhanced-editor"></textarea>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -271,82 +301,426 @@
 <style>
     .image-preview-item {
         position: relative;
-        width: 100px;
+        width: 140px;
         height: 100px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .image-preview-item img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #e6e6e6;
+    }
+    .image-preview-item .remove-preview {
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        border: none;
+        line-height: 1;
+        width: 26px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    /* CKEditor 4 Custom Styling - Word-like appearance */
+    .cke_chrome {
+        border: 1px solid #ddd !important;
+        border-radius: 6px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+    
+    .cke_top {
+        background: linear-gradient(to bottom, #f9fafb 0%, #f3f4f6 100%) !important;
+        border-bottom: 1px solid #ddd !important;
+        padding: 6px 8px !important;
+        border-radius: 6px 6px 0 0 !important;
+    }
+    
+    .cke_toolbar {
+        margin-bottom: 4px !important;
+    }
+    
+    .cke_button {
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: 4px !important;
+        margin: 1px !important;
+    }
+    
+    .cke_button:hover {
+        background: #e5e7eb !important;
+        border-color: #d1d5db !important;
+    }
+    
+    .cke_button_on {
+        background: #dbeafe !important;
+        border-color: #93c5fd !important;
+    }
+    
+    .cke_button_icon {
+        filter: brightness(0.3);
+    }
+    
+    .cke_button:hover .cke_button_icon {
+        filter: brightness(0);
+    }
+    
+    .cke_contents {
+        border-radius: 0 0 6px 6px !important;
+        background: #ffffff !important;
+    }
+    
+    .cke_bottom {
+        background: #f9fafb !important;
+        border-top: 1px solid #e5e7eb !important;
+        padding: 4px 8px !important;
+        border-radius: 0 0 6px 6px !important;
+    }
+    
+    /* Content area styling */
+    .cke_editable {
+        padding: 15px !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+    }
+    
+    .cke_editable img {
+        max-width: 100%;
+        height: auto;
         border-radius: 4px;
-        border: 2px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .cke_editable table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    .cke_editable table td,
+    .cke_editable table th {
+        border: 1px solid #ddd;
+        padding: 8px;
     }
 </style>
 @endpush
 
 @push('scripts')
-<!-- TinyMCE CDN -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- CKEditor 4 - From CDN (Full Package with all plugins) -->
+<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
 
 <script>
-    // Initialize TinyMCE for all textareas with class tinymce-editor
-    document.addEventListener('DOMContentLoaded', function() {
-        
-        // Initialize for Add Modal
-        tinymce.init({
-            selector: '#kontenAdd',
-            height: 300,
-            plugins: 'anchor autolink charmap codesample emoticons link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | link media table | align lineheight | numlist bullist indent outdent | removeformat',
-            menubar: false,
-            content_style: 'body { font-family:Arial,sans-serif; font-size:14px }',
-        });
+    // CKEditor Configuration
+    const ckEditorConfig = {
+        // Full toolbar with ALL features (organized like Microsoft Word)
+        toolbar: [
+            { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+            { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+            '/',
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+            { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+            '/',
+            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+            { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+            { name: 'colors', items: ['TextColor', 'BGColor'] },
+            { name: 'tools', items: ['Maximize', 'ShowBlocks'] }
+        ],
+        extraPlugins: 'justify,font,colorbutton,panelbutton,floatpanel,panel,listblock,richcombo,find,selectall,clipboard,wysiwygarea,elementspath',
+        filebrowserUploadUrl: '{{ route("admin.ckeditor.upload") }}?_token={{ csrf_token() }}',
+        filebrowserUploadMethod: 'form',
+        uploadUrl: '{{ route("admin.ckeditor.upload") }}?_token={{ csrf_token() }}',
+        height: 400,
+        allowedContent: true,
+        extraAllowedContent: '*(*);*{*}',
+        format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+        font_names: 'Arial/Arial, Helvetica, sans-serif;' +
+            'Comic Sans MS/Comic Sans MS, cursive;' +
+            'Courier New/Courier New, Courier, monospace;' +
+            'Georgia/Georgia, serif;' +
+            'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+            'Tahoma/Tahoma, Geneva, sans-serif;' +
+            'Times New Roman/Times New Roman, Times, serif;' +
+            'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
+            'Verdana/Verdana, Geneva, sans-serif',
+        fontSize_sizes: '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px',
+        pasteFromWordRemoveFontStyles: false,
+        pasteFromWordRemoveStyles: false,
+        language: 'en',
+        contentsCss: ['{{ asset('ckeditor/contents.css') }}']
+    };
 
-        // Initialize for Edit Modals when modal is shown
+    // Initialize CKEditor 4 for all enhanced editors
+    document.addEventListener('DOMContentLoaded', function() {
+        const editorMap = new Map();
+
+        // Function to initialize CKEditor on a textarea
+        function initCKEditor(textarea) {
+            // Ensure element has an id
+            if (!textarea.id) textarea.id = 'editor_' + Math.random().toString(36).substr(2,9);
+
+            // Skip if already initialized
+            if (CKEDITOR.instances[textarea.id]) {
+                return CKEDITOR.instances[textarea.id];
+            }
+
+            const editor = CKEDITOR.replace(textarea.id, ckEditorConfig);
+                // Full toolbar with ALL features (organized like Microsoft Word)
+                toolbar: [
+                    { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+                    { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+                    '/',
+                    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+                    { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+                    { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+                    '/',
+                    { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+                    { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                    { name: 'colors', items: ['TextColor', 'BGColor'] },
+                    { name: 'tools', items: ['Maximize', 'ShowBlocks'] }
+                ],
+
+                // Extra plugins untuk fitur lengkap
+                extraPlugins: 'justify,font,colorbutton,panelbutton,floatpanel,panel,listblock,richcombo,find,selectall,clipboard,wysiwygarea,elementspath',
+
+                // Upload image configuration
+                filebrowserUploadUrl: '{{ route("admin.ckeditor.upload") }}?_token={{ csrf_token() }}',
+                filebrowserUploadMethod: 'form',
+
+                // Image upload settings
+                uploadUrl: '{{ route("admin.ckeditor.upload") }}?_token={{ csrf_token() }}',
+
+                // Height
+                height: 400,
+
+                // Remove elements path at bottom
+                removePlugins: '',
+
+                // Allow all content
+                allowedContent: true,
+
+                // Disable Advanced Content Filter (ACF)
+                extraAllowedContent: '*(*);*{*}',
+
+                // Format tags
+                format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+
+                // Font names
+                font_names: 'Arial/Arial, Helvetica, sans-serif;' +
+                    'Comic Sans MS/Comic Sans MS, cursive;' +
+                    'Courier New/Courier New, Courier, monospace;' +
+                    'Georgia/Georgia, serif;' +
+                    'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+                    'Tahoma/Tahoma, Geneva, sans-serif;' +
+                    'Times New Roman/Times New Roman, Times, serif;' +
+                    'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
+                    'Verdana/Verdana, Geneva, sans-serif',
+
+                // Font sizes
+                fontSize_sizes: '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px',
+
+                // Paste from Word
+                pasteFromWordRemoveFontStyles: false,
+                pasteFromWordRemoveStyles: false,
+
+            // Store editor instance
+            editorMap.set(textarea.id, editor);
+            textarea.__ckEditorInstance = editor;
+
+            // Character count update
+            const container = textarea.closest('.card');
+            const charCountEl = container ? container.querySelector('.editor-char-count') : null;
+
+            if (charCountEl) {
+                editor.on('change', function() {
+                    const data = editor.getData();
+                    const text = data.replace(/<[^>]*>/g, '').trim();
+                    charCountEl.textContent = text.length;
+                });
+
+                // Initial count
+                editor.on('instanceReady', function() {
+                    const data = editor.getData();
+                    const text = data.replace(/<[^>]*>/g, '').trim();
+                    charCountEl.textContent = text.length;
+                });
+            }
+
+            return editor;
+        }
+
+        // Initialize CKEditor for Add modal when modal is shown
+        const addModal = document.getElementById('addBeritaModal');
+        if (addModal) {
+            addModal.addEventListener('shown.bs.modal', function() {
+                const textarea = document.querySelector('#kontenAdd');
+                if (textarea && !CKEDITOR.instances[textarea.id]) {
+                    // Small delay to ensure modal is fully visible
+                    setTimeout(function() {
+                        initCKEditor(textarea);
+                    }, 100);
+                }
+            });
+        }
+
+        // Initialize CKEditor for Edit modals when they are shown
         document.querySelectorAll('[id^="editBeritaModal"]').forEach(modal => {
             modal.addEventListener('shown.bs.modal', function() {
-                const textarea = this.querySelector('.tinymce-editor');
-                if (textarea && !tinymce.get(textarea.id)) {
-                    const uniqueId = 'tinymce_' + Math.random().toString(36).substr(2, 9);
-                    textarea.id = uniqueId;
-                    
-                    tinymce.init({
-                        selector: '#' + uniqueId,
-                        height: 300,
-                        plugins: 'anchor autolink charmap codesample emoticons link lists media searchreplace table visualblocks wordcount',
-                        toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough | link media table | align lineheight | numlist bullist indent outdent | removeformat',
-                        menubar: false,
-                        content_style: 'body { font-family:Arial,sans-serif; font-size:14px }',
-                    });
-                }
-            });
-        });
-
-    });
-
-    // Image Preview Handler
-    document.querySelectorAll('.image-input').forEach(input => {
-        input.addEventListener('change', function(e) {
-            const previewId = this.getAttribute('data-preview');
-            const preview = document.getElementById(previewId);
-            preview.innerHTML = '';
-            
-            const files = Array.from(e.target.files);
-            
-            files.forEach((file, index) => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const div = document.createElement('div');
-                        div.className = 'image-preview-item';
-                        div.innerHTML = `<img src="${e.target.result}" alt="Preview ${index + 1}">`;
-                        preview.appendChild(div);
+                const textarea = this.querySelector('.enhanced-editor');
+                if (textarea) {
+                    // Ensure element has ID
+                    if (!textarea.id) {
+                        textarea.id = 'editor_' + Math.random().toString(36).substr(2,9);
                     }
-                    reader.readAsDataURL(file);
+                    
+                    // Destroy existing instance if any
+                    if (CKEDITOR.instances[textarea.id]) {
+                        CKEDITOR.instances[textarea.id].destroy(true);
+                    }
+                    
+                    // Small delay to ensure modal is fully visible
+                    setTimeout(function() {
+                        initCKEditor(textarea);
+                    }, 100);
+                }
+            });
+
+            // Destroy editor when modal is hidden to prevent memory leaks
+            modal.addEventListener('hidden.bs.modal', function() {
+                const textarea = this.querySelector('.enhanced-editor');
+                if (textarea && CKEDITOR.instances[textarea.id]) {
+                    CKEDITOR.instances[textarea.id].destroy(true);
+                }
+            });
+        });
+
+        // On form submit, update textarea with CKEditor data
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                // Update all CKEditor instances before submit
+                for (const instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
                 }
             });
         });
     });
+
+    // Image Preview Handler (robust)
+    // Keeps an in-memory array of files per input so we can remove single files and sync input.files.
+    (function() {
+        const fileStore = new Map(); // input element -> Array<File>
+
+        function ensurePreviewContainer(input) {
+            const previewId = input.getAttribute('data-preview');
+            let preview = document.getElementById(previewId);
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.id = previewId || ('preview_' + Math.random().toString(36).slice(2,8));
+                preview.className = 'mt-3 d-flex flex-wrap gap-2';
+                input.parentNode.appendChild(preview);
+            }
+            return preview;
+        }
+
+        function renderPreviews(input) {
+            const files = fileStore.get(input) || [];
+            const preview = ensurePreviewContainer(input);
+            preview.innerHTML = '';
+
+            files.forEach((file, idx) => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const div = document.createElement('div');
+                    div.className = 'image-preview-item position-relative';
+                    div.setAttribute('data-file-index', idx);
+                    div.innerHTML = `
+                        <img src="${ev.target.result}" alt="Preview ${idx + 1}">
+                        <button type="button" class="btn btn-danger btn-sm remove-preview position-absolute top-0 end-0 m-1" style="padding: 2px 6px; font-size: 12px;">×</button>
+                    `;
+                    preview.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function syncInputFiles(input) {
+            const files = fileStore.get(input) || [];
+            try {
+                const dt = new DataTransfer();
+                files.forEach(f => dt.items.add(f));
+                input.files = dt.files;
+            } catch (err) {
+                // DataTransfer may not be available in some environments; fallback: cannot fully sync
+                // but at least leave the input as-is. (Most modern browsers support DataTransfer.)
+                console.warn('DataTransfer not available, cannot fully sync input.files', err);
+            }
+        }
+
+        // When files are selected
+        document.addEventListener('change', function(e) {
+            const input = e.target;
+            if (!input || !input.classList || !input.classList.contains('image-input')) return;
+
+            const files = Array.from(input.files || []);
+            fileStore.set(input, files);
+            syncInputFiles(input);
+            renderPreviews(input);
+        });
+
+        // Delegated remove button handler
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest && e.target.closest('.remove-preview');
+            if (!btn) return;
+
+            const previewItem = btn.closest('.image-preview-item');
+            if (!previewItem) return;
+
+            // find associated preview container and the input it belongs to
+            const preview = previewItem.parentNode;
+            const previewId = preview.id;
+            // find the input that references this previewId
+            const input = Array.from(document.querySelectorAll('.image-input')).find(i => i.getAttribute('data-preview') === previewId);
+            if (!input) return;
+
+            const idx = Number(previewItem.getAttribute('data-file-index'));
+            const files = fileStore.get(input) || [];
+            if (isNaN(idx) || idx < 0 || idx >= files.length) return;
+
+            files.splice(idx, 1); // remove the file
+            fileStore.set(input, files);
+            syncInputFiles(input);
+            renderPreviews(input);
+        });
+
+        // When a modal is hidden, clear its stored files for the inputs inside it
+        document.addEventListener('hidden.bs.modal', function(e) {
+            const modal = e.target;
+            if (!modal) return;
+            const inputs = modal.querySelectorAll('.image-input');
+            inputs.forEach(input => {
+                fileStore.delete(input);
+                // ensure preview cleared
+                const previewId = input.getAttribute && input.getAttribute('data-preview');
+                const preview = previewId ? document.getElementById(previewId) : null;
+                if (preview) preview.innerHTML = '';
+                try { input.value = ''; } catch (err) {
+                    const newInput = input.cloneNode();
+                    input.parentNode.replaceChild(newInput, input);
+                }
+            });
+        }, true);
+    })();
 
     // Delete Confirmation for Berita
     document.querySelectorAll('.btn-delete').forEach(button => {
@@ -405,6 +779,27 @@
             });
         });
     });
+
+    // Clear Add modal previews and inputs when modal is hidden so previews don't persist unexpectedly
+    var addModalEl = document.getElementById('addBeritaModal');
+    if (addModalEl) {
+        addModalEl.addEventListener('hidden.bs.modal', function () {
+            const input = addModalEl.querySelector('.image-input');
+            if (input) {
+                try {
+                    input.value = '';
+                } catch (err) {
+                    // some browsers disallow setting value for file input via JS in certain contexts
+                    const newInput = input.cloneNode();
+                    input.parentNode.replaceChild(newInput, input);
+                }
+
+                const previewId = (input.getAttribute && input.getAttribute('data-preview')) || 'imagePreviewAdd';
+                const preview = document.getElementById(previewId);
+                if (preview) preview.innerHTML = '';
+            }
+        });
+    }
 
     // Re-open modal if validation error
     @if ($errors->any())

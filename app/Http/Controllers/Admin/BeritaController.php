@@ -129,4 +129,37 @@ class BeritaController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    /**
+     * Upload image from CKEditor 4
+     */
+    public function uploadEditorImage(Request $request)
+    {
+        $request->validate([
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5MB
+        ]);
+
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            
+            // Store in ckeditor folder
+            $path = $file->store('ckeditor', 'public');
+            
+            // Get full URL
+            $url = asset('storage/' . $path);
+
+            // CKEditor 4 expects this specific response format
+            $funcNum = $request->input('CKEditorFuncNum');
+            $message = 'Image uploaded successfully';
+            
+            // Return JavaScript callback for CKEditor 4
+            return response("<script>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', '{$message}');</script>")
+                ->header('Content-Type', 'text/html');
+        }
+
+        $funcNum = $request->input('CKEditorFuncNum');
+        $message = 'Upload failed';
+        return response("<script>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>")
+            ->header('Content-Type', 'text/html');
+    }
 }
