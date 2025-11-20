@@ -182,6 +182,8 @@
             versionCheck: false, // Disable security warning
             filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
             filebrowserUploadMethod: 'form',
+            filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+            uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
             
             // Toolbar configuration - lengkap dengan bold, italic, dll
             toolbarGroups: [
@@ -207,10 +209,6 @@
             
             // Allow all content
             allowedContent: true,
-            
-            // Image upload
-            filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
-            uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
             
             // Remove dialog tabs
             removeDialogTabs: 'image:advanced;link:advanced'
