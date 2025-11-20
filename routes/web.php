@@ -78,11 +78,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Kategori Berita CRUD
     Route::resource('kategori_berita', \App\Http\Controllers\Admin\KategoriBeritaController::class)->except(['show', 'create', 'edit']);
     // Berita CRUD
-    Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class)->except(['show', 'create', 'edit']);
-    // Berita image delete - now handled by BeritaController
-    Route::delete('berita/image/{id}', [\App\Http\Controllers\Admin\BeritaController::class, 'deleteImage'])->name('berita.image.delete');
+    Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
     // CKEditor image upload
-    Route::post('ckeditor/upload', [\App\Http\Controllers\Admin\BeritaController::class, 'uploadEditorImage'])->name('ckeditor.upload');
+    Route::post('ckeditor/upload', [\App\Http\Controllers\Admin\BeritaController::class, 'uploadImage'])->name('ckeditor.upload');
 });
 
 // Profile routes

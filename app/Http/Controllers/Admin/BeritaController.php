@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\BeritaImage;
 use App\Models\KategoriBerita;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -18,9 +18,13 @@ class BeritaController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         
-        $kategoris = KategoriBerita::orderBy('nama')->get();
-        
-        return view('admin.berita.index', compact('beritas', 'kategoris'));
+        return view('admin.berita.index', compact('beritas'));
+    }
+
+    public function create()
+    {
+        $kategoris = KategoriBerita::all();
+        return view('admin.berita.create', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -30,13 +34,19 @@ class BeritaController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'konten' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Generate unique slug
+        // Create slug from judul
         $slug = Str::slug($request->judul);
-        $count = Berita::where('slug', 'like', "$slug%")->count();
-        if ($count) $slug .= '-' . ($count + 1);
+        $originalSlug = $slug;
+        $count = 1;
+
+        // Check if slug exists and make it unique
+        while (Berita::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
 
         // Create berita
         $berita = Berita::create([
@@ -50,116 +60,129 @@ class BeritaController extends Controller
         // Handle multiple images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('berita', 'public');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('berita', $imageName, 'public');
+
                 BeritaImage::create([
                     'berita_id' => $berita->id,
-                    'path' => $path,
+                    'path' => $path
                 ]);
             }
         }
 
         return redirect()->route('admin.berita.index')
-            ->with('success', 'Berita berhasil ditambahkan');
+            ->with('success', 'Berita berhasil ditambahkan!');
+    }
+
+    public function edit($id)
+    {
+        $berita = Berita::with('images')->findOrFail($id);
+        $kategoris = KategoriBerita::all();
+        return view('admin.berita.edit', compact('berita', 'kategoris'));
     }
 
     public function update(Request $request, $id)
     {
+        $berita = Berita::findOrFail($id);
+
         $request->validate([
             'kategori_id' => 'required|exists:kategori_berita,id',
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'konten' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $berita = Berita::findOrFail($id);
-
-        // Update slug only if title changed
+        // Update slug if judul changed
+        $slug = $berita->slug;
         if ($berita->judul !== $request->judul) {
             $slug = Str::slug($request->judul);
-            $count = Berita::where('slug', 'like', "$slug%")
-                ->where('id', '!=', $id)
-                ->count();
-            if ($count) $slug .= '-' . ($count + 1);
-            $berita->slug = $slug;
+            $originalSlug = $slug;
+            $count = 1;
+
+            while (Berita::where('slug', $slug)->where('id', '!=', $id)->exists()) {
+                $slug = $originalSlug . '-' . $count;
+                $count++;
+            }
         }
 
+        // Update berita
         $berita->update([
             'kategori_id' => $request->kategori_id,
             'judul' => $request->judul,
+            'slug' => $slug,
             'deskripsi' => $request->deskripsi,
             'konten' => $request->konten,
         ]);
 
+        // Handle delete existing images
+        if ($request->has('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $image = BeritaImage::find($imageId);
+                if ($image) {
+                    Storage::disk('public')->delete($image->path);
+                    $image->delete();
+                }
+            }
+        }
+
         // Handle new images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('berita', 'public');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('berita', $imageName, 'public');
+
                 BeritaImage::create([
                     'berita_id' => $berita->id,
-                    'path' => $path,
+                    'path' => $path
                 ]);
             }
         }
 
         return redirect()->route('admin.berita.index')
-            ->with('success', 'Berita berhasil diperbarui');
+            ->with('success', 'Berita berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
 
-        // Delete all images from storage
+        // Delete all images
         foreach ($berita->images as $image) {
             Storage::disk('public')->delete($image->path);
+            $image->delete();
         }
 
         $berita->delete();
 
         return redirect()->route('admin.berita.index')
-            ->with('success', 'Berita berhasil dihapus');
+            ->with('success', 'Berita berhasil dihapus!');
     }
 
-    public function deleteImage($id)
-    {
-        $image = BeritaImage::findOrFail($id);
-        Storage::disk('public')->delete($image->path);
-        $image->delete();
-
-        return response()->json(['success' => true]);
-    }
-
-    /**
-     * Upload image from CKEditor 4
-     */
-    public function uploadEditorImage(Request $request)
+    // Upload image from CKEditor
+    public function uploadImage(Request $request)
     {
         $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5MB
+            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('upload')) {
-            $file = $request->file('upload');
-            
-            // Store in ckeditor folder
-            $path = $file->store('ckeditor', 'public');
-            
-            // Get full URL
+            $image = $request->file('upload');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('ckeditor', $imageName, 'public');
             $url = asset('storage/' . $path);
 
-            // CKEditor 4 expects this specific response format
-            $funcNum = $request->input('CKEditorFuncNum');
-            $message = 'Image uploaded successfully';
-            
-            // Return JavaScript callback for CKEditor 4
-            return response("<script>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', '{$message}');</script>")
-                ->header('Content-Type', 'text/html');
+            return response()->json([
+                'uploaded' => true,
+                'url' => $url
+            ]);
         }
 
-        $funcNum = $request->input('CKEditorFuncNum');
-        $message = 'Upload failed';
-        return response("<script>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>")
-            ->header('Content-Type', 'text/html');
+        return response()->json([
+            'uploaded' => false,
+            'error' => [
+                'message' => 'Upload failed'
+            ]
+        ]);
     }
 }
