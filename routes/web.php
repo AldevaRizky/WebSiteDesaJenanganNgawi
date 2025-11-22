@@ -80,8 +80,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // UMKM CRUD routes
     Route::resource('umkm', \App\Http\Controllers\Admin\UmkmController::class);
     // Perangkat Desa CRUD + bagan
-    // register bagan route before resource to avoid conflict with {perangkat} show route
-    Route::get('perangkat/bagan', [\App\Http\Controllers\Admin\PerangkatDesaController::class, 'bagan'])->name('perangkat.bagan');
+    // register bagan routes (single-photo CRUD) before resource to avoid conflict with {perangkat} show route
+    Route::get('perangkat/bagan', [\App\Http\Controllers\Admin\BaganController::class, 'index'])->name('perangkat.bagan');
+    Route::post('perangkat/bagan', [\App\Http\Controllers\Admin\BaganController::class, 'store'])->name('perangkat.bagan.store');
+    Route::put('perangkat/bagan/{id}', [\App\Http\Controllers\Admin\BaganController::class, 'update'])->name('perangkat.bagan.update');
+    Route::delete('perangkat/bagan/{id}', [\App\Http\Controllers\Admin\BaganController::class, 'destroy'])->name('perangkat.bagan.destroy');
     Route::resource('perangkat', \App\Http\Controllers\Admin\PerangkatDesaController::class);
     // Berita CRUD
     Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
