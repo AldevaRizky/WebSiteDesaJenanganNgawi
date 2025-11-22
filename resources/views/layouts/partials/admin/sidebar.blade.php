@@ -147,8 +147,8 @@
         </li>
 
         <!-- Message -->
-        <li class="menu-item {{ request()->routeIs('pesans.index') ? 'active' : '' }}">
-            <a href="#" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.pesans.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.pesans.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-chat"></i>
                 <div class="text-truncate" data-i18n="Message">Pesan Masuk</div>
             </a>
