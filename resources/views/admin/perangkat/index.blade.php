@@ -24,7 +24,6 @@
                             <th>#</th>
                             <th>Nama</th>
                             <th>Jabatan</th>
-                            <th>Parent</th>
                             <th>Gambar</th>
                             <th>Aksi</th>
                         </tr>
@@ -35,7 +34,7 @@
                             <td>{{ $loop->iteration + ($perangkats->currentPage()-1)*$perangkats->perPage() }}</td>
                             <td>{{ $p->nama }}</td>
                             <td>{{ $p->jabatan ?? '-' }}</td>
-                            <td>{{ $p->parent?->nama ?? '-' }}</td>
+                            
                             <td>
                                 @if($p->gambar)
                                     <img src="{{ asset('storage/' . $p->gambar) }}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;">
@@ -83,19 +82,7 @@
                         <label class="form-label">Jabatan</label>
                         <input type="text" name="jabatan" class="form-control">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Parent</label>
-                        <select name="parent_id" class="form-select">
-                            <option value="">-- Tidak Ada --</option>
-                            @foreach($all as $parent)
-                                <option value="{{ $parent->id }}">{{ $parent->nama }} - {{ $parent->jabatan }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Urutan</label>
-                        <input type="number" name="order" class="form-control" value="0">
-                    </div>
+                    {{-- parent/ordering removed; DB no longer stores hierarchy in perangkat_desas --}}
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control" rows="3"></textarea>
@@ -144,19 +131,7 @@
                             <label class="form-label">Jabatan</label>
                             <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan', $p->jabatan) }}">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Parent</label>
-                            <select name="parent_id" class="form-select">
-                                <option value="">-- Tidak Ada --</option>
-                                @foreach($all->where('id', '!=', $p->id) as $parent)
-                                    <option value="{{ $parent->id }}" {{ old('parent_id', $p->parent_id) == $parent->id ? 'selected' : '' }}>{{ $parent->nama }} - {{ $parent->jabatan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Urutan</label>
-                            <input type="number" name="order" class="form-control" value="{{ old('order', $p->order) }}">
-                        </div>
+                        {{-- parent/ordering removed --}}
                         <div class="mb-3">
                             <label class="form-label">Deskripsi</label>
                             <textarea name="deskripsi" class="form-control" rows="3">{{ old('deskripsi', $p->deskripsi) }}</textarea>
