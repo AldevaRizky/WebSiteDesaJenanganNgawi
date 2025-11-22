@@ -16,8 +16,6 @@ class PerangkatDesa extends Model
         'jabatan',
         'gambar',
         'deskripsi',
-        'parent_id',
-        'order',
         'phone',
         'email',
         'active',
@@ -28,20 +26,7 @@ class PerangkatDesa extends Model
     ];
 
     /**
-     * Parent perangkat (for hierarchical structure)
-     */
-    public function parent()
-    {
-        return $this->belongsTo(self::class, 'parent_id');
-    }
-
-    /**
-     * Children perangkat (for hierarchical structure)
-     */
-    public function children()
-    {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('order');
-    }
+    // hierarchy removed: parent_id and order columns are dropped in latest migration
 
     /**
      * Scope only active records
