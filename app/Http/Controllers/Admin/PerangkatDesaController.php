@@ -3,108 +3,83 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PerangkatDesa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Models\PerangkatDesa;
+use App\Models\BaganImage;
 
 class PerangkatDesaController extends Controller
 {
-    public function index()
-    {
-        $perangkats = PerangkatDesa::with('parent')->orderBy('order')->paginate(15);
-        $all = PerangkatDesa::orderBy('order')->get();
-        return view('admin.perangkat.index', compact('perangkats', 'all'));
-    }
+	public function index()
+	{
+		$perangkats = PerangkatDesa::paginate(10);
+		$all = PerangkatDesa::all();
+		return view('admin.perangkat.index', compact('perangkats', 'all'));
+	}
 
-    public function create()
-    {
-        $parents = PerangkatDesa::orderBy('order')->get();
-        return view('admin.perangkat.create', compact('parents'));
-    }
+	public function store(Request $request)
+	{
+		$request->validate([
+			'nama' => 'required|string|max:255',
+			'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:102400',
+			'email' => 'nullable|email',
+		]);
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nama' => 'required|string|max:191',
-            'jabatan' => 'nullable|string|max:191',
-            'deskripsi' => 'nullable|string',
-            'parent_id' => 'nullable|exists:perangkat_desas,id',
-            'order' => 'nullable|integer',
-            'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:191',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+		$data = $request->only(['nama', 'jabatan', 'deskripsi', 'phone', 'email']);
 
-        if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('perangkat', 'public');
-        }
+		if ($request->hasFile('gambar')) {
+			// store on the public disk under 'perangkat' directory
+			$data['gambar'] = $request->file('gambar')->store('perangkat', 'public');
+		}
 
-        PerangkatDesa::create($data);
+		$data['active'] = true;
 
-        return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat desa berhasil ditambahkan.');
-    }
+		PerangkatDesa::create($data);
 
-    public function edit(PerangkatDesa $perangkat)
-    {
-        $parents = PerangkatDesa::where('id', '!=', $perangkat->id)->orderBy('order')->get();
-        return view('admin.perangkat.edit', compact('perangkat', 'parents'));
-    }
+		return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat berhasil ditambahkan!');
+	}
 
-    public function update(Request $request, PerangkatDesa $perangkat)
-    {
-        $data = $request->validate([
-            'nama' => 'required|string|max:191',
-            'jabatan' => 'nullable|string|max:191',
-            'deskripsi' => 'nullable|string',
-            'parent_id' => 'nullable|exists:perangkat_desas,id',
-            'order' => 'nullable|integer',
-            'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:191',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+	public function update(Request $request, $id)
+	{
+		$request->validate([
+			'nama' => 'required|string|max:255',
+			'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:102400',
+			'email' => 'nullable|email',
+		]);
 
-        if ($request->hasFile('gambar')) {
-            // delete old if exists
-            if ($perangkat->gambar && \Storage::disk('public')->exists($perangkat->gambar)) {
-                \Storage::disk('public')->delete($perangkat->gambar);
-            }
-            $data['gambar'] = $request->file('gambar')->store('perangkat', 'public');
-        }
+		$p = PerangkatDesa::findOrFail($id);
 
-        // If user marked existing image for deletion (no new upload)
-        if ($request->input('delete_image')) {
-            if ($perangkat->gambar && \Storage::disk('public')->exists($perangkat->gambar)) {
-                \Storage::disk('public')->delete($perangkat->gambar);
-            }
-            $data['gambar'] = null;
-        }
+		$p->nama = $request->nama;
+		$p->jabatan = $request->jabatan;
+		$p->deskripsi = $request->deskripsi;
+		$p->phone = $request->phone;
+		$p->email = $request->email;
 
-        $perangkat->update($data);
+		// handle delete of existing image (use public disk)
+		if ($request->filled('delete_image') && $request->delete_image == 1) {
+			if ($p->gambar) {
+				Storage::disk('public')->delete($p->gambar);
+			}
+			$p->gambar = null;
+		}
 
-        return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat desa diperbarui.');
-    }
+		if ($request->hasFile('gambar')) {
+			if ($p->gambar) Storage::disk('public')->delete($p->gambar);
+			$p->gambar = $request->file('gambar')->store('perangkat', 'public');
+		}
 
-    public function destroy(PerangkatDesa $perangkat)
-    {
-        // delete image
-        if ($perangkat->gambar && \Storage::disk('public')->exists($perangkat->gambar)) {
-            \Storage::disk('public')->delete($perangkat->gambar);
-        }
+		$p->save();
 
-        // reassign children to parent (if any)
-        PerangkatDesa::where('parent_id', $perangkat->id)->update(['parent_id' => $perangkat->parent_id]);
+		return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat berhasil diperbarui!');
+	}
 
-        $perangkat->delete();
+	public function destroy($id)
+	{
+	$p = PerangkatDesa::findOrFail($id);
+	if ($p->gambar) Storage::disk('public')->delete($p->gambar);
+		$p->delete();
+		return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat berhasil dihapus!');
+	}
 
-        return redirect()->route('admin.perangkat.index')->with('success', 'Perangkat desa dihapus.');
-    }
-
-    /**
-     * Display bagan (organizational chart)
-     */
-    public function bagan()
-    {
-        $roots = PerangkatDesa::with('children')->whereNull('parent_id')->orderBy('order')->get();
-        return view('admin.perangkat.bagan', compact('roots'));
-    }
+	// bagan handled by separate BaganController now
 }
