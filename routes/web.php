@@ -13,40 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // Static data for landing page (so it works without DB)
-    $heroes = [
-        (object)['cover' => 'assets/img/hero1.jpg'],
-        (object)['cover' => 'assets/img/hero2.jpg'],
-    ];
-
-    $logos = [
-        (object)['logo' => 'assets/img/logo1.png'],
-        (object)['logo' => 'assets/img/logo2.png'],
-        (object)['logo' => 'assets/img/logo3.png'],
-    ];
-
-    $dataSekolah = (object)[
-        'siswa' => 1200,
-        'guru' => 75,
-        'prestasi' => 45,
-    ];
-
-    $berita = [
-        (object)['id' => 1, 'gambar' => 'assets/img/news1.jpg', 'judul' => 'Pengumuman Peringkat Sekolah', 'deskripsi' => 'Sekolah kita meraih peringkat terbaik dalam kompetisi regional.'],
-        (object)['id' => 2, 'gambar' => 'assets/img/news2.jpg', 'judul' => 'Kegiatan Bakti Sosial', 'deskripsi' => 'Siswa-siswi mengikuti kegiatan bakti sosial di lingkungan sekitar.'],
-        (object)['id' => 3, 'gambar' => 'assets/img/news3.jpg', 'judul' => 'Festival Seni', 'deskripsi' => 'Pameran dan pentas seni memperlihatkan talenta siswa.'],
-    ];
-
-    $ekstrakurikuler = [
-        (object)['gambar' => 'assets/img/ex1.png', 'nama' => 'Pramuka'],
-        (object)['gambar' => 'assets/img/ex2.png', 'nama' => 'Basket'],
-        (object)['gambar' => 'assets/img/ex3.png', 'nama' => 'Seni Tari'],
-        (object)['gambar' => 'assets/img/ex4.png', 'nama' => 'Sains Club'],
-    ];
-
-    return view('landing.index', compact('heroes', 'logos', 'dataSekolah', 'berita', 'ekstrakurikuler'));
-})->name('landing.index');
+// Landing page routes
+Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing.index');
+Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'storeContact'])->name('landing.contact');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

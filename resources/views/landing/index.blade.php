@@ -13,7 +13,7 @@
             </div>
             <div id="hero-images" class="hero-images absolute top-0 left-0 w-full h-full">
                 @foreach ($heroes as $hero)
-                    <div class="hero-image" style="background-image: url('{{ asset($hero->cover) }}');"></div>
+                    <div class="hero-image" style="background-image: url('{{ asset('storage/' . str_replace('public/', '', $hero->cover)) }}');"></div>
                 @endforeach
             </div>
         </header>
@@ -21,32 +21,38 @@
         <!-- Logo Section -->
         <section id="logo-section" class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white py-6 px-12 rounded-3xl shadow-lg flex items-center justify-around space-x-6 w-[90%] max-w-4xl">
             @foreach($logos as $logo)
-                <img src="{{ asset($logo->logo) }}" alt="Logo" class="h-16 md:h-20 hover:scale-110 transition-transform duration-300 ease-in-out">
+                <img src="{{ asset('storage/' . str_replace('public/', '', $logo->logo)) }}" alt="Logo" class="h-16 md:h-20 hover:scale-110 transition-transform duration-300 ease-in-out">
             @endforeach
         </section>
 
-        <!-- School Data Section -->
-        <section id="data-sekolah" class="py-12 mt-0 bg-blue-50 text-center" style="background-size: 100% 150%; background-position: center;">
-            <h2 class="text-4xl md:text-4xl font-bold text-gray-800 mt-20 mb-6">DATA SEKOLAH</h2>
+        <!-- Data Penduduk Section -->
+        <section id="data-penduduk" class="py-12 mt-0 bg-blue-50 text-center" style="background-size: 100% 150%; background-position: center;">
+            <h2 class="text-4xl md:text-4xl font-bold text-gray-800 mt-20 mb-6">DATA PENDUDUK</h2>
             <div class="w-16 h-1 bg-blue-500 mx-auto mb-12"></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16">
-                <!-- Siswa -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-6 md:px-16">
+                <!-- Total Penduduk -->
                 <div class="flex flex-col items-center mb-8">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2940/2940653.png" alt="Siswa" class="h-12 mb-2">
-                    <p class="text-2xl font-bold text-blue-500">{{ $dataSekolah->siswa ?? 'N/A' }}</p>
-                    <p class="text-gray-600">Siswa</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/681/681443.png" alt="Total Penduduk" class="h-12 mb-2">
+                    <p class="text-2xl font-bold text-blue-500">{{ $dataPenduduk->total_penduduk ?? 'N/A' }}</p>
+                    <p class="text-gray-600">Total Penduduk</p>
                 </div>
-                <!-- Guru -->
+                <!-- Kepala Keluarga -->
                 <div class="flex flex-col items-center mb-8">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3429/3429433.png" alt="Guru" class="h-12 mb-2">
-                    <p class="text-2xl font-bold text-blue-500">{{ $dataSekolah->guru ?? 'N/A' }}</p>
-                    <p class="text-gray-600">Guru</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3429/3429433.png" alt="Kepala Keluarga" class="h-12 mb-2">
+                    <p class="text-2xl font-bold text-blue-500">{{ $dataPenduduk->kepala_keluarga ?? 'N/A' }}</p>
+                    <p class="text-gray-600">Kepala Keluarga</p>
                 </div>
-                <!-- Prestasi -->
+                <!-- Laki-laki -->
                 <div class="flex flex-col items-center mb-8">
-                    <img src="https://cdn-icons-png.flaticon.com/512/13059/13059602.png" alt="Prestasi" class="h-12 mb-2">
-                    <p class="text-2xl font-bold text-blue-500">{{ $dataSekolah->prestasi ?? 'N/A' }}</p>
-                    <p class="text-gray-600">Prestasi</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Laki-laki" class="h-12 mb-2">
+                    <p class="text-2xl font-bold text-blue-500">{{ $dataPenduduk->laki_laki ?? 'N/A' }}</p>
+                    <p class="text-gray-600">Laki-laki</p>
+                </div>
+                <!-- Perempuan -->
+                <div class="flex flex-col items-center mb-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png" alt="Perempuan" class="h-12 mb-2">
+                    <p class="text-2xl font-bold text-blue-500">{{ $dataPenduduk->perempuan ?? 'N/A' }}</p>
+                    <p class="text-gray-600">Perempuan</p>
                 </div>
             </div>
         </section>
@@ -58,20 +64,28 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16">
 
                 <!-- Loop untuk menampilkan berita -->
-                @foreach($berita as $item)
+                @forelse($berita as $item)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
                     <!-- Gambar berita -->
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
+                    @if($item->images->isNotEmpty())
+                        <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
+                    @else
+                        <img src="{{ asset('assets/img/default-news.jpg') }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
+                    @endif
                     <div class="p-6">
+                        <span class="text-xs text-blue-500 font-semibold">{{ $item->kategori->nama ?? 'Umum' }}</span>
                         <!-- Judul berita -->
-                        <h3 class="font-semibold text-lg text-gray-800 mb-3">{{ $item->judul }}</h3>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-3 mt-2">{{ $item->judul }}</h3>
                         <!-- Deskripsi berita -->
                         <p class="text-gray-600 text-sm mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
-                        <!-- Link ke detail berita -->
-                        {{-- <a href="{{ route('landing.detail-berita', $item->id) }}" class="text-blue-500 font-bold hover:underline">Read More &gt;&gt;</a> --}}
+                        <p class="text-gray-400 text-xs">{{ $item->created_at->format('d M Y') }}</p>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-span-3 text-center py-8">
+                    <p class="text-gray-500">Belum ada berita tersedia</p>
+                </div>
+                @endforelse
             </div>
             <!-- Button "Lebih Banyak" -->
             <div class="mt-8">
@@ -81,29 +95,38 @@
             </div>
         </section>
 
-        <!-- Extrakurikuler Section -->
-        <section id="ekstrakurikuler" class="py-12 bg-blue-50 text-center">
-            <h2 class="text-4xl font-bold text-gray-800 mt-6 mb-6">EKSTRAKURIKULER</h2>
+        <!-- UMKM Section -->
+        <section id="umkm" class="py-12 bg-blue-50 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mt-6 mb-6">UMKM DESA</h2>
             <div class="w-16 h-1 bg-blue-500 mx-auto mb-12"></div>
 
             <!-- Grid Container -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-6 md:px-16 mb-10">
-                <!-- Loop untuk menampilkan data ekstrakurikuler -->
-                @foreach($ekstrakurikuler as $item)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden p-6 hover:scale-105 transition-transform duration-300">
-                    <!-- Gambar ekstrakurikuler -->
-                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->nama }}" class="w-20 h-20 mx-auto mb-4 object-contain">
-                    <!-- Nama ekstrakurikuler -->
-                    <h3 class="font-semibold text-lg text-blue-600">{{ $item->nama }}</h3>
+                <!-- Loop untuk menampilkan data UMKM -->
+                @forelse($umkm as $item)
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+                    <!-- Gambar UMKM -->
+                    @if($item->images->isNotEmpty())
+                        <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover">
+                    @else
+                        <img src="{{ asset('assets/img/default-umkm.jpg') }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover">
+                    @endif
+                    <div class="p-4">
+                        <!-- Nama UMKM -->
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">{{ $item->nama }}</h3>
+                        <p class="text-gray-600 text-sm">{{ Str::limit($item->deskripsi, 80) }}</p>
+                        @if($item->link_wa)
+                            <a href="{{ $item->link_wa }}" target="_blank" class="inline-block mt-3 text-blue-500 hover:text-blue-700 text-sm font-semibold">
+                                <i class='bx bxl-whatsapp'></i> Hubungi
+                            </a>
+                        @endif
+                    </div>
                 </div>
-                @endforeach
-            </div>
-
-            <!-- Button "Lebih Banyak" -->
-            <div class="mt-8">
-                {{-- <a href="{{ route('landing.ekstrakurikuler') }}" class="bg-blue-500 text-white font-bold py-2 px-8 rounded-md hover:bg-blue-600 transition duration-300">
-                    LEBIH BANYAK
-                </a> --}}
+                @empty
+                <div class="col-span-4 text-center py-8">
+                    <p class="text-gray-500">Belum ada data UMKM tersedia</p>
+                </div>
+                @endforelse
             </div>
         </section>
 
@@ -117,14 +140,14 @@
                 <!-- Left Section (Contact Form) -->
                 <div class="w-full lg:w-1/2 p-8">
                     <h3 class="text-2xl font-semibold mb-6 text-gray-800">Hubungi Kami</h3>
-                    {{-- <form action="{{ route('pesan.store') }}" method="POST" class="space-y-6"> --}}
+                    <form action="{{ route('landing.contact') }}" method="POST" class="space-y-6">
                         @csrf
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
-                            <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan nama Anda" required>
+                            <label for="nama" class="block text-sm font-medium text-gray-600">Nama</label>
+                            <input type="text" id="nama" name="nama" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan nama Anda" required>
                         </div>
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-600">E-mail</label>
+                            <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
                             <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Masukkan email Anda" required>
                         </div>
                         <div>
