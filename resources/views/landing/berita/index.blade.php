@@ -5,7 +5,7 @@
 @section('content')
     <div class="bg-gray-100">
         <div class="relative bg-cover bg-center h-64"
-        style="background-image: url('{{ $heroBanner && $heroBanner->cover ? asset('storage/' . str_replace('public/', '', $heroBanner->cover)) : asset('assets/img/hero-default.jpg') }}');
+        style="background-image: url('{{ $heroBanner && $heroBanner->image ? Storage::url($heroBanner->image) : asset('assets/img/hero-default.jpg') }}');
                 background-size: cover;
                 background-repeat: no-repeat;
                 width: 100%;
