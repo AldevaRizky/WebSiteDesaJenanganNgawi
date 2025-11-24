@@ -55,9 +55,7 @@ Route::get('/dashboard', function () {
 // Admin routes with auth middleware
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Admin dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Heroes CRUD routes
     Route::resource('heroes', \App\Http\Controllers\Admin\HeroController::class)->except(['show', 'create', 'edit']);
