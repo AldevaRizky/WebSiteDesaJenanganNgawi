@@ -36,24 +36,44 @@
                     href="javascript:void(0);"
                     data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                      @auth
+                        <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" class="w-px-40 h-auto rounded-circle" />
+                      @else
+                        <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                      @endauth
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                      @auth
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                          <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                              <div class="avatar avatar-online">
+                                <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" class="w-px-40 h-auto rounded-circle" />
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <h6 class="mb-0">{{ auth()->user()->name }}</h6>
+                              <small class="text-muted">{{ auth()->user()->role ?? 'Admin' }}</small>
                             </div>
                           </div>
-                          <div class="flex-grow-1">
-                            <h6 class="mb-0">Desa Jenangan</h6>
-                            <small class="text-muted">Admin</small>
+                        </a>
+                      @else
+                        <a class="dropdown-item" href="#">
+                          <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                              <div class="avatar avatar-online">
+                                <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                              </div>
+                            </div>
+                            <div class="flex-grow-1">
+                              <h6 class="mb-0">Desa Jenangan</h6>
+                              <small class="text-muted">Admin</small>
+                            </div>
                           </div>
-                        </div>
-                      </a>
+                        </a>
+                      @endauth
                     </li>
                     <li>
                       <div class="dropdown-divider my-1"></div>
