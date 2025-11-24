@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hero;
+use App\Models\HeroBanner;
 use App\Models\Logo;
 use App\Models\DataPenduduk;
 use App\Models\Berita;
@@ -53,5 +54,39 @@ class LandingController extends Controller
         ]);
 
         return redirect()->route('landing.index')->with('success', 'Pesan Anda berhasil dikirim!');
+    }
+
+    public function berita()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch all berita with pagination
+        $berita = Berita::with(['images', 'kategori'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        return view('landing.berita.index', compact('berita', 'heroBanner'));
+    }
+
+    public function detailBerita($slug)
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch berita by slug
+        $berita = Berita::with(['images', 'kategori'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Fetch related news from same category (exclude current berita)
+        $relatedBerita = Berita::with(['images', 'kategori'])
+            ->where('kategori_id', $berita->kategori_id)
+            ->where('id', '!=', $berita->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        return view('landing.berita.show', compact('berita', 'heroBanner', 'relatedBerita'));
     }
 }

@@ -64,7 +64,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16">
 
                 <!-- Loop untuk menampilkan berita -->
-                @forelse($berita as $item)
+                @foreach($berita as $item)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
                     <!-- Gambar berita -->
                     @if($item->images->isNotEmpty())
@@ -73,25 +73,21 @@
                         <img src="{{ asset('assets/img/default-news.jpg') }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
                     @endif
                     <div class="p-6">
-                        <span class="text-xs text-blue-500 font-semibold">{{ $item->kategori->nama ?? 'Umum' }}</span>
                         <!-- Judul berita -->
-                        <h3 class="font-semibold text-lg text-gray-800 mb-3 mt-2">{{ $item->judul }}</h3>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-3">{{ $item->judul }}</h3>
                         <!-- Deskripsi berita -->
                         <p class="text-gray-600 text-sm mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
-                        <p class="text-gray-400 text-xs">{{ $item->created_at->format('d M Y') }}</p>
+                        <!-- Link ke detail berita -->
+                        <a href="{{ route('landing.detail-berita', $item->slug) }}" class="text-blue-500 font-bold hover:underline">Read More &gt;&gt;</a>
                     </div>
                 </div>
-                @empty
-                <div class="col-span-3 text-center py-8">
-                    <p class="text-gray-500">Belum ada berita tersedia</p>
-                </div>
-                @endforelse
+                @endforeach
             </div>
             <!-- Button "Lebih Banyak" -->
             <div class="mt-8">
-                {{-- <a href="{{ route('landing.berita') }}" class="bg-blue-500 text-white font-bold py-2 px-8 rounded-md hover:bg-blue-600 transition duration-300">
+                <a href="{{ route('landing.berita') }}" class="bg-blue-500 text-white font-bold py-2 px-8 rounded-md hover:bg-blue-600 transition duration-300">
                     LEBIH BANYAK
-                </a> --}}
+                </a>
             </div>
         </section>
 
