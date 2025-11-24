@@ -50,7 +50,7 @@
                           <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                               <div class="avatar avatar-online">
-                                <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" class="w-px-40 h-auto rounded-circle" />
+                                <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" style="width:40px;height:40px;object-fit:cover;object-position:center;border-radius:50%;" />
                               </div>
                             </div>
                             <div class="flex-grow-1">
@@ -64,7 +64,7 @@
                           <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                               <div class="avatar avatar-online">
-                                <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="" style="width:40px;height:40px;object-fit:cover;object-position:center;border-radius:50%;" />
                               </div>
                             </div>
                             <div class="flex-grow-1">
