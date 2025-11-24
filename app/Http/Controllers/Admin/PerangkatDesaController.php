@@ -10,9 +10,20 @@ use App\Models\BaganImage;
 
 class PerangkatDesaController extends Controller
 {
-	public function index()
+	public function index(Request $request)
 	{
-		$perangkats = PerangkatDesa::paginate(10);
+		$q = $request->get('q');
+
+		$query = PerangkatDesa::query();
+		if ($q) {
+			$query->where(function($qr) use ($q) {
+				$qr->where('nama', 'like', "%{$q}%")
+				   ->orWhere('jabatan', 'like', "%{$q}%")
+				   ->orWhere('deskripsi', 'like', "%{$q}%");
+			});
+		}
+
+		$perangkats = $query->paginate(10)->appends(['q' => $q]);
 		$all = PerangkatDesa::all();
 		return view('admin.perangkat.index', compact('perangkats', 'all'));
 	}

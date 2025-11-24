@@ -9,9 +9,16 @@ use Illuminate\Support\Str;
 
 class KategoriBeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kategoris = KategoriBerita::orderBy('nama')->paginate(10);
+        $q = $request->get('q');
+
+        $query = KategoriBerita::orderBy('nama');
+        if ($q) {
+            $query->where('nama', 'like', "%{$q}%");
+        }
+
+        $kategoris = $query->paginate(10)->appends(['q' => $q]);
         return view('admin.kategori_berita.index', compact('kategoris'));
     }
 

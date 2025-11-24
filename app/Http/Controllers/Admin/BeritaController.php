@@ -12,12 +12,23 @@ use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $beritas = Berita::with(['kategori', 'images'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        
+        $q = $request->get('q');
+
+        $beritasQuery = Berita::with(['kategori', 'images'])
+            ->orderBy('created_at', 'desc');
+
+        if ($q) {
+            $beritasQuery->where(function($query) use ($q) {
+                $query->where('judul', 'like', "%{$q}%")
+                      ->orWhere('deskripsi', 'like', "%{$q}%")
+                      ->orWhere('konten', 'like', "%{$q}%");
+            });
+        }
+
+        $beritas = $beritasQuery->paginate(10)->appends(['q' => $q]);
+
         return view('admin.berita.index', compact('beritas'));
     }
 
@@ -172,7 +183,7 @@ class BeritaController extends Controller
                 // CKEditor 4 memerlukan format ini
                 $CKEditorFuncNum = $request->input('CKEditorFuncNum');
                 $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', 'Image uploaded successfully');</script>";
-                
+
                 return response($response);
             } catch (\Exception $e) {
                 $CKEditorFuncNum = $request->input('CKEditorFuncNum');

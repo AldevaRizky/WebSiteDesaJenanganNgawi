@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Storage;
 
 class UmkmController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $umkms = Umkm::with('images')->orderBy('created_at', 'desc')->paginate(10);
+        $q = $request->get('q');
+
+        $umkmsQuery = Umkm::with('images')->orderBy('created_at', 'desc');
+        if ($q) {
+            $umkmsQuery->where(function($query) use ($q) {
+                $query->where('nama', 'like', "%{$q}%")
+                      ->orWhere('deskripsi', 'like', "%{$q}%")
+                      ->orWhere('alamat', 'like', "%{$q}%");
+            });
+        }
+
+        $umkms = $umkmsQuery->paginate(10)->appends(['q' => $q]);
         return view('admin.umkm.index', compact('umkms'));
     }
 

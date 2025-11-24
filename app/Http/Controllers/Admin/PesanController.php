@@ -10,7 +10,18 @@ class PesanController extends Controller
 {
     public function index()
     {
-        $pesans = Pesan::paginate(10);
+        $q = request()->get('q');
+
+        $query = Pesan::orderBy('created_at', 'desc');
+        if ($q) {
+            $query->where(function($qr) use ($q) {
+                $qr->where('nama', 'like', "%{$q}%")
+                   ->orWhere('email', 'like', "%{$q}%")
+                   ->orWhere('message', 'like', "%{$q}%");
+            });
+        }
+
+        $pesans = $query->paginate(10)->appends(['q' => $q]);
         return view('admin.pesans.index', compact('pesans'));
     }
 

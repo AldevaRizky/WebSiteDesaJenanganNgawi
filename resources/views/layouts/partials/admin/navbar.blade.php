@@ -12,14 +12,18 @@
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                 <!-- Search -->
               <div class="navbar-nav align-items-center me-auto">
-                <div class="nav-item d-flex align-items-center">
-                  <span class="w-px-22 h-px-22"><i class="icon-base bx bx-search icon-md"></i></span>
+                <form class="nav-item d-flex align-items-center" method="GET" action="{{ url()->current() }}">
+                  <button type="submit" class="btn btn-link p-0 me-2 text-secondary" aria-label="Search">
+                    <i class="icon-base bx bx-search icon-md"></i>
+                  </button>
                   <input
-                    type="text"
+                    type="search"
+                    name="q"
+                    value="{{ request('q') }}"
                     class="form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none"
                     placeholder="Search..."
                     aria-label="Search..." />
-                </div>
+                </form>
               </div>
               <!-- /Search -->
 

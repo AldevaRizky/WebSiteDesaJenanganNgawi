@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(10);
+        $q = $request->get('q');
+
+        $query = User::orderBy('name');
+        if ($q) {
+            $query->where(function($qr) use ($q) {
+                $qr->where('name', 'like', "%{$q}%")
+                   ->orWhere('email', 'like', "%{$q}%")
+                   ->orWhere('jabatan', 'like', "%{$q}%");
+            });
+        }
+
+        $users = $query->paginate(10)->appends(['q' => $q]);
         return view('admin.users.index', compact('users'));
     }
 
