@@ -65,20 +65,21 @@
 
                 <!-- Loop untuk menampilkan berita -->
                 @foreach($berita as $item)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 flex flex-col h-full">
                     <!-- Gambar berita -->
                     @if($item->images->isNotEmpty())
                         <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
                     @else
                         <img src="{{ asset('assets/img/default-news.jpg') }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
                     @endif
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
+                        <span class="text-xs text-blue-500 font-semibold mb-2 inline-block px-3 py-1 border-2 border-blue-500 rounded-full self-start break-words">{{ $item->kategori->nama ?? 'Umum' }}</span>
                         <!-- Judul berita -->
-                        <h3 class="font-semibold text-lg text-gray-800 mb-3">{{ $item->judul }}</h3>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-3 text-center line-clamp-2 min-h-[3.5rem] break-words overflow-hidden">{{ $item->judul }}</h3>
                         <!-- Deskripsi berita -->
-                        <p class="text-gray-600 text-sm mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow break-words overflow-hidden">{{ $item->deskripsi }}</p>
                         <!-- Link ke detail berita -->
-                        <a href="{{ route('landing.detail-berita', $item->slug) }}" class="text-blue-500 font-bold hover:underline">Read More &gt;&gt;</a>
+                        <a href="{{ route('landing.detail-berita', $item->slug) }}" class="text-blue-500 font-bold hover:underline mt-auto text-sm">Read More &gt;&gt;</a>
                     </div>
                 </div>
                 @endforeach

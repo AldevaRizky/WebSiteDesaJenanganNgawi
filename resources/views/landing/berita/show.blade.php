@@ -84,14 +84,15 @@
                 <h3 class="text-2xl font-bold text-gray-800 mb-6">Berita Terkait</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach($relatedBerita as $related)
-                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 flex flex-col h-full">
                         @if($related->images->isNotEmpty())
                             <img src="{{ asset('storage/' . $related->images->first()->path) }}" alt="{{ $related->judul }}" class="w-full h-48 object-cover">
                         @endif
-                        <div class="p-4">
-                            <h4 class="font-semibold text-gray-800 mb-2">{{ Str::limit($related->judul, 60) }}</h4>
-                            <p class="text-gray-600 text-sm mb-3">{{ Str::limit($related->deskripsi, 80) }}</p>
-                            <a href="{{ route('landing.detail-berita', $related->slug) }}" class="text-blue-500 text-sm font-bold hover:underline">Baca Selengkapnya &gt;&gt;</a>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <span class="text-xs text-blue-500 font-semibold mb-2 inline-block px-3 py-1 border-2 border-blue-500 rounded-full self-start break-words">{{ $related->kategori->nama ?? 'Umum' }}</span>
+                            <h4 class="font-semibold text-gray-800 mb-2 text-center line-clamp-2 min-h-[3rem] break-words overflow-hidden">{{ $related->judul }}</h4>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-3 flex-grow break-words overflow-hidden">{{ $related->deskripsi }}</p>
+                            <a href="{{ route('landing.detail-berita', $related->slug) }}" class="text-blue-500 text-sm font-bold hover:underline mt-auto">Baca Selengkapnya &gt;&gt;</a>
                         </div>
                     </div>
                     @endforeach

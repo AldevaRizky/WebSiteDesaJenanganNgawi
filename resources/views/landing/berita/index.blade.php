@@ -22,19 +22,19 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16 mb-10">
             @forelse($berita as $item)
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 flex flex-col h-full">
                 @if($item->images->isNotEmpty())
                     <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
                 @else
                     <img src="{{ asset('assets/img/default-news.jpg') }}" alt="{{ $item->judul }}" class="w-full h-48 object-cover">
                 @endif
-                <div class="p-6">
-                    <span class="text-xs text-blue-500 font-semibold mb-2 inline-block">{{ $item->kategori->nama ?? 'Umum' }}</span>
-                    <h3 class="font-semibold text-lg text-gray-800 mb-3">{{ $item->judul }}</h3>
-                    <p class="text-gray-600 text-sm mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
-                    <div class="flex justify-between items-center">
-                        <a href="{{ route('landing.detail-berita', $item->slug) }}" class="text-blue-500 font-bold hover:underline">Read More &gt;&gt;</a>
-                        <span class="text-gray-400 text-xs">{{ $item->created_at->format('d M Y') }}</span>
+                <div class="p-6 flex flex-col flex-grow">
+                    <span class="text-xs text-blue-500 font-semibold mb-2 inline-block px-3 py-1 border-2 border-blue-500 rounded-full self-start break-words">{{ $item->kategori->nama ?? 'Umum' }}</span>
+                    <h3 class="font-semibold text-lg text-gray-800 mb-3 text-center line-clamp-2 min-h-[3.5rem] break-words overflow-hidden">{{ $item->judul }}</h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow break-words overflow-hidden">{{ $item->deskripsi }}</p>
+                    <div class="flex justify-between items-center mt-auto gap-2">
+                        <a href="{{ route('landing.detail-berita', $item->slug) }}" class="text-blue-500 font-bold hover:underline text-sm">Read More &gt;&gt;</a>
+                        <span class="text-gray-400 text-xs whitespace-nowrap">{{ $item->created_at->format('d M Y') }}</span>
                     </div>
                 </div>
             </div>
