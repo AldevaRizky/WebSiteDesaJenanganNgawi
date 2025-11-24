@@ -61,6 +61,22 @@
         <section id="berita-terbaru" class="py-12 mt-13 bg-gray-100 text-center">
             <h2 class="text-4xl font-bold text-gray-800 mb-6">BERITA TERBARU</h2>
             <div class="w-16 h-1 bg-blue-500 mx-auto mb-8"></div>
+
+            <!-- Filter Kategori -->
+            @if(isset($kategoris))
+            <div class="flex flex-wrap justify-center gap-3 px-6 mb-8">
+                <a href="{{ route('landing.index') }}#berita-terbaru" class="px-6 py-2 rounded-full font-semibold transition-all duration-300 {{ !request('kategori') ? 'bg-blue-500 text-white shadow-lg' : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-blue-500 hover:text-blue-500' }}">
+                    Semua
+                </a>
+                @foreach($kategoris as $kategori)
+                <a href="{{ route('landing.index', ['kategori' => $kategori->slug]) }}#berita-terbaru" class="px-6 py-2 rounded-full font-semibold transition-all duration-300 {{ request('kategori') == $kategori->slug ? 'bg-blue-500 text-white shadow-lg' : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-blue-500 hover:text-blue-500' }}">
+                    {{ $kategori->nama }}
+                </a>
+                @endforeach
+            </div>
+            @endif
+
+            @if($berita->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16">
 
                 <!-- Loop untuk menampilkan berita -->
@@ -84,12 +100,21 @@
                 </div>
                 @endforeach
             </div>
+            @else
+            <div class="text-center py-12">
+                <i class='bx bx-news' style="font-size: 80px; color: #cbd5e1;"></i>
+                <h4 class="text-gray-500 text-xl font-semibold mt-4">Belum Ada Berita</h4>
+                <p class="text-gray-400 mt-2">Berita akan ditampilkan di sini ketika sudah tersedia.</p>
+            </div>
+            @endif
             <!-- Button "Lebih Banyak" -->
+            @if($berita->count() > 0)
             <div class="mt-8">
                 <a href="{{ route('landing.berita') }}" class="bg-blue-500 text-white font-bold py-2 px-8 rounded-md hover:bg-blue-600 transition duration-300">
                     LEBIH BANYAK
                 </a>
             </div>
+            @endif
         </section>
 
         <!-- UMKM Section -->
@@ -98,7 +123,7 @@
             <div class="w-16 h-1 bg-blue-500 mx-auto mb-12"></div>
 
             <!-- Grid Container -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-6 md:px-16 mb-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16 mb-10">
                 <!-- Loop untuk menampilkan data UMKM -->
                 @forelse($umkm as $item)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
@@ -120,8 +145,10 @@
                     </div>
                 </div>
                 @empty
-                <div class="col-span-4 text-center py-8">
-                    <p class="text-gray-500">Belum ada data UMKM tersedia</p>
+                <div class="col-span-3 text-center py-12">
+                    <i class='bx bx-store' style="font-size: 80px; color: #cbd5e1;"></i>
+                    <h4 class="text-gray-500 text-xl font-semibold mt-4">Belum Ada Data UMKM</h4>
+                    <p class="text-gray-400 mt-2">Data UMKM akan ditampilkan di sini ketika sudah tersedia.</p>
                 </div>
                 @endforelse
             </div>

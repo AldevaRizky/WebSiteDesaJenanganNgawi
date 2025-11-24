@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Fetch heroes from database
         $heroes = Hero::all();
@@ -25,19 +25,32 @@ class LandingController extends Controller
         // Fetch data penduduk (single row)
         $dataPenduduk = DataPenduduk::first();
 
-        // Fetch latest 6 berita with images and kategori
-        $berita = Berita::with(['images', 'kategori'])
+        // Fetch all kategoris for filter
+        $kategoris = KategoriBerita::orderBy('nama', 'asc')->get();
+
+        // Build query for berita
+        $query = Berita::with(['images', 'kategori']);
+
+        // Filter by kategori if provided
+        if ($request->has('kategori') && $request->kategori) {
+            $kategori = KategoriBerita::where('slug', $request->kategori)->first();
+            if ($kategori) {
+                $query->where('kategori_id', $kategori->id);
+            }
+        }
+
+        // Fetch latest 3 berita with images and kategori
+        $berita = $query->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        // Fetch UMKM with images (max 3 for grid display)
+        $umkm = Umkm::with('images')
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
 
-        // Fetch UMKM with images (max 8 for grid display)
-        $umkm = Umkm::with('images')
-            ->orderBy('created_at', 'desc')
-            ->limit(4)
-            ->get();
-
-        return view('landing.index', compact('heroes', 'logos', 'dataPenduduk', 'berita', 'umkm'));
+        return view('landing.index', compact('heroes', 'logos', 'dataPenduduk', 'berita', 'umkm', 'kategoris'));
     }
 
     public function storeContact(Request $request)
