@@ -9,9 +9,10 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('put')
+    @if (Route::has('password.update'))
+        <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+            @csrf
+            @method('put')
 
         <div>
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
@@ -44,5 +45,10 @@
                 >{{ __('Saved.') }}</p>
             @endif
         </div>
-    </form>
+        </form>
+    @else
+        <div class="mt-6">
+            <div class="alert alert-info">Password update route is not enabled on this installation.</div>
+        </div>
+    @endif
 </section>
