@@ -18,9 +18,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+            'name',
+            'email',
+            'password',
+            'jabatan',
+            'phone',
+            'alamat',
+            'profile',
     ];
 
     /**
@@ -32,6 +36,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function getProfileUrlAttribute()
+    {
+        if (! $this->profile) return null;
+        return asset('storage/' . $this->profile);
+    }
 
     /**
      * The attributes that should be cast.
