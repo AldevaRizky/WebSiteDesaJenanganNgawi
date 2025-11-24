@@ -191,13 +191,23 @@
         });
     });
 
-    // Show SweetAlert if server-side validation failed for current password
+    // Show SweetAlert for specific server-side password errors
     @if ($errors->has('current_password') || $errors->has('password'))
         (function(){
-            var msg = {!! json_encode($errors->first('current_password') ?: $errors->first('password')) !!};
+            @if ($errors->has('current_password'))
+                var title = 'Masukkan kata sandi saat ini';
+                var msg = {!! json_encode($errors->first('current_password')) !!};
+            @elseif ($errors->has('password'))
+                var raw = {!! json_encode($errors->first('password')) !!};
+                var lower = raw.toLowerCase();
+                var isConfirmation = lower.includes('confirmation') || lower.includes('does not match') || lower.includes('tidak cocok') || lower.includes('konfirmasi') || lower.includes('tidak sama');
+                var title = isConfirmation ? 'Konfirmasi password salah' : 'Password tidak valid';
+                var msg = raw;
+            @endif
+
             Swal.fire({
                 icon: 'error',
-                title: 'Kata sandi salah',
+                title: title,
                 text: msg
             });
         })();
