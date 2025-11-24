@@ -6,10 +6,10 @@
 <div class="bg-gray-100 min-h-screen">
     <!-- Hero Banner -->
     <div class="relative bg-cover bg-center h-64"
-    style="background-image: url('{{ $heroBanner && $heroBanner->cover ? asset('storage/' . str_replace('public/', '', $heroBanner->cover)) : asset('assets/img/hero-default.jpg') }}'); 
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            width: 100%; 
+    style="background-image: url('{{ $heroBanner && $heroBanner->cover ? asset('storage/' . str_replace('public/', '', $heroBanner->cover)) : asset('assets/img/hero-default.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 100%;
             height: 300px;">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <h1 class="text-white text-3xl md:text-5xl font-bold text-center px-4">Detail Berita</h1>

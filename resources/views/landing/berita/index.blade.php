@@ -5,21 +5,21 @@
 @section('content')
     <div class="bg-gray-100">
         <div class="relative bg-cover bg-center h-64"
-        style="background-image: url('{{ $heroBanner && $heroBanner->cover ? asset('storage/' . str_replace('public/', '', $heroBanner->cover)) : asset('assets/img/hero-default.jpg') }}'); 
-                background-size: cover; 
-                background-repeat: no-repeat; 
-                width: 100%; 
-                height: 300px; 
+        style="background-image: url('{{ $heroBanner && $heroBanner->cover ? asset('storage/' . str_replace('public/', '', $heroBanner->cover)) : asset('assets/img/hero-default.jpg') }}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 300px;
                 margin: 0 auto;">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <h1 class="text-white text-3xl md:text-5xl font-bold">Berita Terbaru</h1>
         </div>
     </div>
-    
+
     <div class="container mx-auto">
         <h2 class="text-4xl font-bold text-gray-800 text-center mt-8 mb-6">Berita Terbaru</h2>
         <div class="w-16 h-1 bg-blue-500 mx-auto mb-8"></div>
-        
+
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16 mb-10">
             @forelse($berita as $item)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
