@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Desa Jenangan')
+@section('title', 'Website Desa Jenangan')
 
 @section('content')
         <!-- Hero Section -->
