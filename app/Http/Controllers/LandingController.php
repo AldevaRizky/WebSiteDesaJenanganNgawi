@@ -7,6 +7,7 @@ use App\Models\HeroBanner;
 use App\Models\Logo;
 use App\Models\DataPenduduk;
 use App\Models\Berita;
+use App\Models\KategoriBerita;
 use App\Models\Umkm;
 use App\Models\Pesan;
 use Illuminate\Http\Request;
@@ -56,17 +57,32 @@ class LandingController extends Controller
         return redirect()->route('landing.index')->with('success', 'Pesan Anda berhasil dikirim!');
     }
 
-    public function berita()
+    public function berita(Request $request)
     {
         // Fetch hero banner for header
         $heroBanner = HeroBanner::first();
 
-        // Fetch all berita with pagination
-        $berita = Berita::with(['images', 'kategori'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        // Fetch all kategoris for filter
+        $kategoris = KategoriBerita::orderBy('nama', 'asc')->get();
 
-        return view('landing.berita.index', compact('berita', 'heroBanner'));
+        // Build query for berita
+        $query = Berita::with(['images', 'kategori']);
+
+        // Filter by kategori if provided
+        if ($request->has('kategori') && $request->kategori) {
+            $kategori = KategoriBerita::where('slug', $request->kategori)->first();
+            if ($kategori) {
+                $query->where('kategori_id', $kategori->id);
+            }
+        }
+
+        // Fetch berita with pagination
+        $berita = $query->orderBy('created_at', 'desc')->paginate(12);
+
+        // Append kategori to pagination links
+        $berita->appends(['kategori' => $request->kategori]);
+
+        return view('landing.berita.index', compact('berita', 'heroBanner', 'kategoris'));
     }
 
     public function detailBerita($slug)
