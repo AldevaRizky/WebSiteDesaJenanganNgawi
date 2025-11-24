@@ -88,6 +88,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('perangkat', \App\Http\Controllers\Admin\PerangkatDesaController::class);
     // Pesan (messages) admin view
     Route::resource('pesans', \App\Http\Controllers\Admin\PesanController::class)->only(['index', 'destroy']);
+    // Users admin CRUD
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show']);
     // Berita CRUD
     Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
     // CKEditor image upload
