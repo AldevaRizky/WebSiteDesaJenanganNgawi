@@ -16,6 +16,8 @@
                 @csrf
                 @method('PATCH')
 
+                <input type="hidden" name="current_password" id="current_password_hidden" />
+
                 <div class="mb-4 d-flex align-items-start gap-4">
                     <img id="uploadedAvatar" src="{{ $user->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="avatar" class="rounded" style="width:100px;height:100px;object-fit:cover;" />
                     <div>
@@ -60,7 +62,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" id="saveProfileBtn" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
@@ -77,6 +79,7 @@
             <form action="{{ route('profile.destroy') }}" method="POST" id="deleteAccountForm">
                 @csrf
                 @method('DELETE')
+                <input type="hidden" name="password" id="delete_current_password_hidden" />
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
                     <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
@@ -105,7 +108,52 @@
         if (input) input.value = null;
     });
 
-    // delete account handler with confirmation
+    // Save profile handler (with confirmation). If password fields filled, prompt for current password first.
+    document.getElementById('saveProfileBtn')?.addEventListener('click', function(){
+        const form = this.closest('form');
+        const pwd = form.querySelector('input[name=password]')?.value || '';
+
+        function finalSave() {
+            Swal.fire({
+                title: 'Simpan perubahan?',
+                text: 'Perubahan pada profil akan disimpan.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) form.submit();
+            });
+        }
+
+        if (!pwd) {
+            finalSave();
+            return;
+        }
+
+        // If changing password, ask for current password via SweetAlert input
+        Swal.fire({
+            title: 'Masukkan kata sandi saat ini',
+            input: 'password',
+            inputPlaceholder: 'Kata sandi saat ini',
+            showCancelButton: true,
+            confirmButtonText: 'Lanjutkan',
+            cancelButtonText: 'Batal',
+            preConfirm: (value) => {
+                if (!value) {
+                    Swal.showValidationMessage('Masukkan kata sandi saat ini');
+                }
+                return value;
+            }
+        }).then(r => {
+            if (r.isConfirmed) {
+                document.getElementById('current_password_hidden').value = r.value;
+                finalSave();
+            }
+        });
+    });
+
+    // delete account handler with current-password prompt and confirmation
     document.getElementById('deactivateBtn')?.addEventListener('click', function(){
         const form = document.getElementById('deleteAccountForm');
         const checkbox = document.getElementById('accountActivation');
@@ -115,15 +163,31 @@
         }
 
         Swal.fire({
-            title: 'Hapus akun?',
-            text: 'Akun Anda akan dihapus permanen.',
-            icon: 'warning',
+            title: 'Masukkan kata sandi saat ini',
+            input: 'password',
+            inputPlaceholder: 'Kata sandi saat ini',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!'
-        }).then((res) => {
-            if (res.isConfirmed) form.submit();
+            confirmButtonText: 'Lanjutkan',
+            cancelButtonText: 'Batal',
+            preConfirm: (value) => {
+                if (!value) Swal.showValidationMessage('Masukkan kata sandi saat ini');
+                return value;
+            }
+        }).then(r => {
+            if (!r.isConfirmed) return;
+            document.getElementById('delete_current_password_hidden').value = r.value;
+
+            Swal.fire({
+                title: 'Hapus akun?',
+                text: 'Akun Anda akan dihapus permanen.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((res) => {
+                if (res.isConfirmed) form.submit();
+            });
         });
     });
 </script>

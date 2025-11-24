@@ -17,16 +17,23 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = $request->user();
-
-        $request->validate([
+        // Base validation
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6|confirmed',
             'jabatan' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:50',
             'alamat' => 'nullable|string',
             'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-        ]);
+        ];
+
+        // If user intends to change password, require current password and confirmation
+        if ($request->filled('password')) {
+            $rules['current_password'] = ['required', 'current_password'];
+            $rules['password'] = 'required|string|min:6|confirmed';
+        }
+
+        $request->validate($rules);
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -54,6 +61,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'accountActivation' => 'accepted',
+            'password' => ['required', 'current_password'],
         ]);
 
         $user = $request->user();
