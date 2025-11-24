@@ -190,6 +190,18 @@
             });
         });
     });
+
+    // Show SweetAlert if server-side validation failed for current password
+    @if ($errors->has('current_password') || $errors->has('password'))
+        (function(){
+            var msg = {!! json_encode($errors->first('current_password') ?: $errors->first('password')) !!};
+            Swal.fire({
+                icon: 'error',
+                title: 'Kata sandi salah',
+                text: msg
+            });
+        })();
+    @endif
 </script>
 @endpush
 
