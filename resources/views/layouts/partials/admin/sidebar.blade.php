@@ -146,6 +146,14 @@
             </ul>
         </li>
 
+        <!-- Users -->
+        <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.users.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div class="text-truncate">Users</div>
+            </a>
+        </li>
+
         <!-- Message -->
         <li class="menu-item {{ request()->routeIs('admin.pesans.*') ? 'active' : '' }}">
             <a href="{{ route('admin.pesans.index') }}" class="menu-link">
