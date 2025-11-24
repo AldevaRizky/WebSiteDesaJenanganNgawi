@@ -37,9 +37,9 @@
                     data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                       @auth
-                        <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" class="w-px-40 h-auto rounded-circle" />
+                        <img src="{{ auth()->user()->profile_url ?? asset('assets/img/logo/ngawi.png') }}" alt="{{ auth()->user()->name }}" style="width:40px;height:40px;object-fit:cover;object-position:center;border-radius:50%;" />
                       @else
-                        <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                        <img src="{{ asset('assets/img/logo/ngawi.png') }}" alt class="" style="width:40px;height:40px;object-fit:cover;object-position:center;border-radius:50%;" />
                       @endauth
                     </div>
                   </a>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="flex-grow-1">
                               <h6 class="mb-0">{{ auth()->user()->name }}</h6>
-                              <small class="text-muted">{{ auth()->user()->role ?? 'Admin' }}</small>
+                               <small class="text-muted">{{ auth()->user()->email }}</small>
                             </div>
                           </div>
                         </a>
