@@ -2,54 +2,87 @@
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <!-- Section 1: Informasi Sekolah -->
+            <!-- Section 1: Informasi Desa -->
             <div>
-                <h3 class="text-xl font-bold mt-4 mb-4">SEKOLAH BERPRESTASI</h3>
+                <h3 class="text-xl font-bold mt-4 mb-4">{{ $footer->nama ?? 'DESA JENANGAN' }}</h3>
                 <p class="text-gray-400 mb-4 text-justify">
-                    Sekolah Berprestasi adalah lembaga pendidikan yang berkomitmen membentuk generasi cerdas, beretika, dan berprestasi melalui kurikulum terintegrasi dan kegiatan ekstrakurikuler yang bermutu.
+                    {{ $footer->deskripsi ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' }}
                 </p>
                 <div class="flex space-x-4">
                     <!-- Instagram -->
-                    <a href="https://instagram.com/sekolahberprestasi" class="text-gray-400 hover:text-white" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                    @if($footer && $footer->link_ig)
+                    <a href="{{ $footer->link_ig }}" class="text-gray-400 hover:text-white" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-instagram fa-2x"></i>
                     </a>
+                    @else
+                    <a href="#" class="text-gray-400 hover:text-white opacity-50 cursor-not-allowed" aria-label="Instagram">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    @endif
+
                     <!-- Facebook -->
-                    <a href="https://facebook.com/sekolahberprestasi" class="text-gray-400 hover:text-white" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                    @if($footer && $footer->link_fb)
+                    <a href="{{ $footer->link_fb }}" class="text-gray-400 hover:text-white" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-facebook fa-2x"></i>
                     </a>
+                    @else
+                    <a href="#" class="text-gray-400 hover:text-white opacity-50 cursor-not-allowed" aria-label="Facebook">
+                        <i class="fab fa-facebook fa-2x"></i>
+                    </a>
+                    @endif
+
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/6281234567890" class="text-gray-400 hover:text-white" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
+                    @if($footer && $footer->link_wa)
+                    <a href="{{ $footer->link_wa }}" class="text-gray-400 hover:text-white" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-whatsapp fa-2x"></i>
                     </a>
+                    @else
+                    <a href="#" class="text-gray-400 hover:text-white opacity-50 cursor-not-allowed" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp fa-2x"></i>
+                    </a>
+                    @endif
+
                     <!-- Youtube -->
-                    <a href="https://youtube.com/@sekolahberprestasi" class="text-gray-400 hover:text-white" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
+                    @if($footer && $footer->link_youtube)
+                    <a href="{{ $footer->link_youtube }}" class="text-gray-400 hover:text-white" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-youtube fa-2x"></i>
                     </a>
+                    @else
+                    <a href="#" class="text-gray-400 hover:text-white opacity-50 cursor-not-allowed" aria-label="Youtube">
+                        <i class="fab fa-youtube fa-2x"></i>
+                    </a>
+                    @endif
                 </div>
             </div>
 
             <!-- Section 2: Hubungi Kami -->
             <div>
                 <h3 class="text-xl font-bold mt-4 mb-4">HUBUNGI KAMI</h3>
-                <p class="text-gray-400 text-justify">Jl. Pendidikan No.10, Kecamatan Contoh, Kabupaten Contoh, 12345</p>
-                <p class="text-gray-400">Telepon: (021) 555-1234</p>
+                <p class="text-gray-400 text-justify">{{ $footer->alamat ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Jl. Contoh No. 123, Kecamatan Contoh, Kabupaten Contoh, 12345' }}</p>
+                <p class="text-gray-400">Telepon: {{ $footer->telepon ?? '(021) 555-1234' }}</p>
                 <p class="text-gray-400">
                     Email:
-                    <a href="mailto:info@sekolahberprestasi.example" class="text-blue-400 hover:underline">info@sekolahberprestasi.example</a>
+                    <a href="mailto:{{ $footer->email ?? 'info@desajenangan.id' }}" class="text-blue-400 hover:underline">{{ $footer->email ?? 'info@desajenangan.id' }}</a>
                 </p>
             </div>
 
-            <!-- Section 3: Lokasi Sekolah -->
+            <!-- Section 3: Lokasi Desa -->
             <div>
-                <h3 class="text-xl font-bold mt-4 mb-4">LOKASI SEKOLAH</h3>
+                <h3 class="text-xl font-bold mt-4 mb-4">LOKASI DESA</h3>
                 <div class="w-full h-40 rounded-lg overflow-hidden">
+                    @if($footer && $footer->lokasi)
                     <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.0000000000005!2d110.00000000000001!3d-7.000000000000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70800000000001%3A0x0000000000000000!2sSekolah%20Berprestasi!5e0!3m2!1sen!2sid!4v0000000000000"
+                    src="{{ $footer->lokasi }}"
                     width="100%"
                     height="100%"
                     style="border:0;"
                     allowfullscreen=""
                     loading="lazy"></iframe>
+                    @else
+                    <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                        <p class="text-gray-400 text-sm text-center px-4">Peta lokasi akan ditampilkan di sini</p>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
