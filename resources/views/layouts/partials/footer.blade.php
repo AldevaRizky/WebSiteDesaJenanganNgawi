@@ -58,7 +58,7 @@
         <!-- Footer Bottom -->
         <div class="border-t border-gray-700 mt-8 pt-4 text-center">
         <p class="text-gray-400">
-            &copy; 2024 SEKOLAHKU. All rights reserved. Powered by Euphemia
+            &copy; {{ date('Y') }} Pemerintah Desa Jenangan. All rights reserved. Powered by Euphemia.
         </p>
         </div>
     </footer>
