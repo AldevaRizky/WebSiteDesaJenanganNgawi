@@ -4,17 +4,22 @@
 
 @section('content')
 <!-- Hero Banner -->
-<section class="relative h-64 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center">
-    @if($heroBanner && $heroBanner->image)
-    <div class="absolute inset-0">
-        <img src="{{ Storage::url($heroBanner->image) }}" alt="Hero Banner" class="w-full h-full object-cover opacity-30">
+<div class="bg-gray-100">
+    <div class="relative bg-cover bg-center h-64"
+        style="background-image: url('{{ $heroBanner && $heroBanner->image ? Storage::url($heroBanner->image) : asset('assets/img/hero-default.jpg') }}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 300px;
+                margin: 0 auto;">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="text-center px-4">
+                <h1 class="text-white text-3xl md:text-5xl font-bold">UMKM DESA JENANGAN</h1>
+                <p class="text-white/80 mt-2">Produk Unggulan dari Desa Jenangan</p>
+            </div>
+        </div>
     </div>
-    @endif
-    <div class="relative z-10 text-center text-white">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">UMKM DESA JENANGAN</h1>
-        <p class="text-lg md:text-xl">Produk Unggulan dari Desa Jenangan</p>
-    </div>
-</section>
+</div>
 
 <!-- Breadcrumb -->
 <div class="bg-gray-100 py-4">
