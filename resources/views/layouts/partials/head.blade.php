@@ -6,6 +6,8 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/scrollreveal"></script>
+<!-- Boxicons (icons used across landing pages) -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 <!-- Tailwind CSS Customization -->
 <style>
     /* Navbar styles */

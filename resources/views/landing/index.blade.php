@@ -145,9 +145,26 @@
 
                         <!-- Alamat -->
                         @if($item->alamat)
-                        <div class="flex items-start text-gray-700 text-sm mb-3">
-                            <i class='bx bx-map text-blue-500 text-lg mr-2 mt-0.5'></i>
-                            <span class="line-clamp-2">{{ $item->alamat }}</span>
+                        <div class="flex items-start text-gray-700 text-sm mb-3 justify-between">
+                            <div class="flex items-start max-w-[70%]">
+                                <i class='bx bx-map-pin text-blue-500 text-lg mr-3 mt-0.5'></i>
+                                <div>
+                                    <span class="block text-sm font-semibold text-gray-800">Alamat</span>
+                                    <span class="block line-clamp-2 text-sm text-gray-700">{{ $item->alamat }}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                @if($item->link_maps)
+                                <a href="{{ $item->link_maps }}" target="_blank" class="text-red-500 hover:text-red-600" title="Lihat di Maps">
+                                    <i class="bx bx-map text-xl"></i>
+                                </a>
+                                @endif
+                                @if($item->link_wa)
+                                <a href="{{ $item->link_wa }}" target="_blank" class="text-green-500 hover:text-green-600" title="Chat di WhatsApp">
+                                    <i class="bx bxl-whatsapp text-xl"></i>
+                                </a>
+                                @endif
+                            </div>
                         </div>
                         @endif
 
