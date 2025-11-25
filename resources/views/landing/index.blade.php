@@ -139,10 +139,10 @@
                     <div class="p-5 flex flex-col flex-grow">
                         <!-- Nama UMKM -->
                         <h3 class="font-bold text-xl text-gray-800 mb-3 line-clamp-2 min-h-[3.5rem]">{{ $item->nama }}</h3>
-                        
+
                         <!-- Deskripsi -->
                         <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{{ $item->deskripsi }}</p>
-                        
+
                         <!-- Alamat -->
                         @if($item->alamat)
                         <div class="flex items-start text-gray-700 text-sm mb-3">
@@ -150,7 +150,7 @@
                             <span class="line-clamp-2">{{ $item->alamat }}</span>
                         </div>
                         @endif
-                        
+
                         <!-- Action Buttons -->
                         <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-200">
                             <div class="flex gap-2">
@@ -159,14 +159,14 @@
                                     <i class='bx bxl-whatsapp text-xl'></i>
                                 </a>
                                 @endif
-                                
+
                                 @if($item->link_maps)
                                 <a href="{{ $item->link_maps }}" target="_blank" class="flex items-center justify-center w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300" title="Google Maps">
                                     <i class='bx bx-map text-xl'></i>
                                 </a>
                                 @endif
                             </div>
-                            
+
                             <a href="{{ route('landing.umkm.show', $item->id) }}" class="text-blue-500 font-semibold hover:text-blue-700 text-sm flex items-center gap-1">
                                 Detail <i class='bx bx-right-arrow-alt text-lg'></i>
                             </a>
@@ -181,7 +181,7 @@
                 </div>
                 @endforelse
             </div>
-            
+
             <!-- Button "Lebih Banyak" -->
             @if($umkm->count() > 0)
             <div class="mt-8">

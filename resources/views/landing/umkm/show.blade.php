@@ -45,7 +45,7 @@
                 <!-- UMKM Info Card -->
                 <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                     <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ $umkm->nama }}</h2>
-                    
+
                     <!-- Deskripsi -->
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold text-gray-700 mb-3 flex items-center">
@@ -76,7 +76,7 @@
                                 <span class="font-semibold">WhatsApp</span>
                             </a>
                             @endif
-                            
+
                             @if($umkm->link_maps)
                             <a href="{{ $umkm->link_maps }}" target="_blank" class="flex items-center gap-2 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-colors duration-300 shadow-md hover:shadow-lg">
                                 <i class='bx bx-map text-2xl'></i>
