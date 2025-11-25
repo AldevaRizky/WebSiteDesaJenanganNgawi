@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('landing.index');
 Route::get('/berita', [\App\Http\Controllers\LandingController::class, 'berita'])->name('landing.berita');
 Route::get('/berita/{slug}', [\App\Http\Controllers\LandingController::class, 'detailBerita'])->name('landing.detail-berita');
+Route::get('/umkm', [\App\Http\Controllers\LandingController::class, 'umkm'])->name('landing.umkm');
+Route::get('/umkm/{id}', [\App\Http\Controllers\LandingController::class, 'detailUmkm'])->name('landing.umkm.show');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'storeContact'])->name('landing.contact');
 
 Route::get('/dashboard', function () {

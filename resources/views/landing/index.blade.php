@@ -126,22 +126,51 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-16 mb-10">
                 <!-- Loop untuk menampilkan data UMKM -->
                 @forelse($umkm as $item)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col h-full">
                     <!-- Gambar UMKM -->
-                    @if($item->images->isNotEmpty())
-                        <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover">
-                    @else
-                        <img src="{{ asset('assets/img/default-umkm.jpg') }}" alt="{{ $item->nama }}" class="w-full h-48 object-cover">
-                    @endif
-                    <div class="p-4">
-                        <!-- Nama UMKM -->
-                        <h3 class="font-semibold text-lg text-gray-800 mb-2">{{ $item->nama }}</h3>
-                        <p class="text-gray-600 text-sm">{{ Str::limit($item->deskripsi, 80) }}</p>
-                        @if($item->link_wa)
-                            <a href="{{ $item->link_wa }}" target="_blank" class="inline-block mt-3 text-blue-500 hover:text-blue-700 text-sm font-semibold">
-                                <i class='bx bxl-whatsapp'></i> Hubungi
-                            </a>
+                    <div class="relative overflow-hidden" style="height: 200px;">
+                        @if($item->images->isNotEmpty())
+                            <img src="{{ asset('storage/' . $item->images->first()->path) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                        @else
+                            <img src="{{ asset('assets/img/default-umkm.jpg') }}" alt="{{ $item->nama }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
                         @endif
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/50 to-transparent"></div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <!-- Nama UMKM -->
+                        <h3 class="font-bold text-xl text-gray-800 mb-3 line-clamp-2 min-h-[3.5rem]">{{ $item->nama }}</h3>
+                        
+                        <!-- Deskripsi -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{{ $item->deskripsi }}</p>
+                        
+                        <!-- Alamat -->
+                        @if($item->alamat)
+                        <div class="flex items-start text-gray-700 text-sm mb-3">
+                            <i class='bx bx-map text-blue-500 text-lg mr-2 mt-0.5'></i>
+                            <span class="line-clamp-2">{{ $item->alamat }}</span>
+                        </div>
+                        @endif
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-200">
+                            <div class="flex gap-2">
+                                @if($item->link_wa)
+                                <a href="{{ $item->link_wa }}" target="_blank" class="flex items-center justify-center w-10 h-10 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300" title="WhatsApp">
+                                    <i class='bx bxl-whatsapp text-xl'></i>
+                                </a>
+                                @endif
+                                
+                                @if($item->link_maps)
+                                <a href="{{ $item->link_maps }}" target="_blank" class="flex items-center justify-center w-10 h-10 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300" title="Google Maps">
+                                    <i class='bx bx-map text-xl'></i>
+                                </a>
+                                @endif
+                            </div>
+                            
+                            <a href="{{ route('landing.umkm.show', $item->id) }}" class="text-blue-500 font-semibold hover:text-blue-700 text-sm flex items-center gap-1">
+                                Detail <i class='bx bx-right-arrow-alt text-lg'></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 @empty
@@ -152,6 +181,15 @@
                 </div>
                 @endforelse
             </div>
+            
+            <!-- Button "Lebih Banyak" -->
+            @if($umkm->count() > 0)
+            <div class="mt-8">
+                <a href="{{ route('landing.umkm') }}" class="bg-blue-500 text-white font-bold py-2 px-8 rounded-md hover:bg-blue-600 transition duration-300">
+                    LEBIH BANYAK
+                </a>
+            </div>
+            @endif
         </section>
 
         <div id="contact" class="container mx-auto px-4 py-12">

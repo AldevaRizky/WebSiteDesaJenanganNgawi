@@ -118,4 +118,35 @@ class LandingController extends Controller
 
         return view('landing.berita.show', compact('berita', 'heroBanner', 'relatedBerita'));
     }
+
+    public function umkm()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch all UMKM with pagination
+        $umkm = Umkm::with('images')
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        return view('landing.umkm.index', compact('umkm', 'heroBanner'));
+    }
+
+    public function detailUmkm($id)
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch UMKM by ID
+        $umkm = Umkm::with('images')->findOrFail($id);
+
+        // Fetch related UMKM (exclude current)
+        $relatedUmkm = Umkm::with('images')
+            ->where('id', '!=', $umkm->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        return view('landing.umkm.show', compact('umkm', 'heroBanner', 'relatedUmkm'));
+    }
 }
