@@ -14,7 +14,7 @@
                 margin: 0 auto;">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="text-center px-4">
-                <h1 class="text-white text-3xl md:text-5xl font-bold">UMKM DESA JENANGAN</h1>
+                <h1 class="text-white text-3xl md:text-5xl font-bold">UMKM Desa Jenangan</h1>
                 <p class="text-white/80 mt-2">Produk Unggulan dari Desa Jenangan</p>
             </div>
         </div>
