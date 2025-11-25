@@ -39,9 +39,15 @@
             </div>
         </li>
         <li>
-            <a href="#"
+            <a href="{{ route('landing.berita') }}"
                class="navbar-text hover:text-blue-400 large {{ Request::is('berita') ? 'active' : '' }}">
                Berita
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('landing.umkm') }}"
+               class="navbar-text hover:text-blue-400 large {{ Request::is('umkm') ? 'active' : '' }}">
+               UMKM
             </a>
         </li>
                 <li>
