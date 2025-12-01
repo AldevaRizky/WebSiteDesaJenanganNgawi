@@ -65,14 +65,14 @@
                                 <span class="badge bg-{{ $data->status_color }}">{{ $data->status_label }}</span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editDataStuntingModal{{ $data->id }}">
-                                    <i class="bx bx-edit"></i>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDataStuntingModal{{ $data->id }}">
+                                    Edit
                                 </button>
                                 <form action="{{ route('admin.data_stunting.destroy', $data->id) }}" method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-sm btn-danger btn-delete">
-                                        <i class="bx bx-trash"></i>
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $data->id }}">
+                                        Hapus
                                     </button>
                                 </form>
                             </td>
