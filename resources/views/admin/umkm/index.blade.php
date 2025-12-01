@@ -57,7 +57,7 @@
                             <td>{{ Str::limit($umkm->alamat ?? '-', 50) }}</td>
                             <td>
                                 @if($umkm->images->count() > 0)
-                                    <img src="{{ asset('storage/' . $umkm->images->first()->path) }}" 
+                                    <img src="{{ asset('storage/' . $umkm->images->first()->path) }}"
                                          alt="Image" style="width:60px;height:60px;object-fit:cover;border-radius:4px;">
                                     @if($umkm->images->count() > 1)
                                         <small class="text-muted">+{{ $umkm->images->count() - 1 }} lagi</small>
@@ -97,7 +97,7 @@
 
 {{-- Add Modal --}}
 <div class="modal fade" id="addUmkmModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('admin.umkm.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
@@ -112,7 +112,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
-                        <textarea name="deskripsi" class="form-control" rows="3"></textarea>
+                        <textarea name="deskripsi" id="deskripsi" class="form-control" rows="10"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Alamat</label>
@@ -179,7 +179,7 @@
 
     {{-- Edit Modal --}}
     <div class="modal fade" id="editUmkmModal{{ $umkm->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <form action="{{ route('admin.umkm.update', $umkm->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -195,7 +195,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control" rows="3">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
+                            <textarea name="deskripsi" id="edit_deskripsi_{{ $umkm->id }}" class="form-control" rows="10">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Alamat</label>
@@ -280,6 +280,75 @@
 @endpush
 
 @push('scripts')
+<!-- CKEditor Script -->
+<script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
+<script>
+    // Disable CKEditor version check warning
+    CKEDITOR.config.versionCheck = false;
+
+    var addCKEditor;
+    var editCKEditors = {};
+
+    // CKEditor configuration
+    var ckConfig = {
+        height: 300,
+        versionCheck: false,
+        filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+        filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+        uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+        toolbar: [
+            { name: 'clipboard', items: ['Undo', 'Redo'] },
+            { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+            { name: 'colors', items: ['TextColor', 'BGColor'] },
+            '/',
+            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'links', items: ['Link', 'Unlink'] },
+            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
+            { name: 'tools', items: ['Maximize'] }
+        ],
+        allowedContent: true,
+        removeDialogTabs: 'image:advanced;link:advanced'
+    };
+
+    // Add Modal CKEditor initialization
+    var addModal = document.getElementById('addUmkmModal');
+    if (addModal) {
+        addModal.addEventListener('shown.bs.modal', function () {
+            if (!addCKEditor) {
+                addCKEditor = CKEDITOR.replace('deskripsi', ckConfig);
+            }
+        });
+
+        addModal.addEventListener('hidden.bs.modal', function () {
+            if (addCKEditor) {
+                addCKEditor.destroy();
+                addCKEditor = null;
+            }
+        });
+    }
+
+    // Edit Modals CKEditor initialization (dynamic for each UMKM)
+    @foreach($umkms as $umkm)
+    (function() {
+        var editModal = document.getElementById('editUmkmModal{{ $umkm->id }}');
+        if (editModal) {
+            editModal.addEventListener('shown.bs.modal', function () {
+                if (!editCKEditors[{{ $umkm->id }}]) {
+                    editCKEditors[{{ $umkm->id }}] = CKEDITOR.replace('edit_deskripsi_{{ $umkm->id }}', ckConfig);
+                }
+            });
+
+            editModal.addEventListener('hidden.bs.modal', function () {
+                if (editCKEditors[{{ $umkm->id }}]) {
+                    editCKEditors[{{ $umkm->id }}].destroy();
+                    editCKEditors[{{ $umkm->id }}] = null;
+                }
+            });
+        }
+    })();
+    @endforeach
+</script>
 <script>
     // Handle remove existing images across modals (existing images stored in DB)
     // Behavior: show confirmation, then append hidden delete_images[] and hide the image element
