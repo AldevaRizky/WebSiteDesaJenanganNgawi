@@ -13,6 +13,8 @@ use App\Models\Pesan;
 use App\Models\SejarahDesa;
 use App\Models\SambutanKepalaDesa;
 use App\Models\VisiMisi;
+use App\Models\PerangkatDesa;
+use App\Models\BaganImage;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -184,5 +186,19 @@ class LandingController extends Controller
         $visiMisi = VisiMisi::first();
 
         return view('landing.visi-misi.index', compact('visiMisi', 'heroBanner'));
+    }
+
+    public function sotk()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch all active perangkat desa
+        $perangkat = PerangkatDesa::active()->get();
+
+        // Fetch bagan image
+        $bagan = BaganImage::first();
+
+        return view('landing.sotk.index', compact('perangkat', 'bagan', 'heroBanner'));
     }
 }
