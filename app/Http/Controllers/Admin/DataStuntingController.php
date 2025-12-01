@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 
 class DataStuntingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dataStunting = DataStunting::orderBy('tanggal_pengukuran', 'desc')
-            ->paginate(15);
+        $q = $request->get('q');
+
+        $dataStuntingQuery = DataStunting::orderBy('tanggal_pengukuran', 'desc');
+
+        if ($q) {
+            $dataStuntingQuery->where(function($query) use ($q) {
+                $query->where('nama_anak', 'like', "%{$q}%")
+                      ->orWhere('status_stunting', 'like', "%{$q}%");
+            });
+        }
+
+        $dataStunting = $dataStuntingQuery->paginate(10)->appends(['q' => $q]);
 
         return view('admin.data_stunting.index', compact('dataStunting'));
     }

@@ -11,9 +11,21 @@ class VideoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $videos = Video::orderBy('created_at', 'desc')->paginate(15);
+        $q = $request->get('q');
+
+        $videosQuery = Video::orderBy('created_at', 'desc');
+
+        if ($q) {
+            $videosQuery->where(function($query) use ($q) {
+                $query->where('judul', 'like', "%{$q}%")
+                      ->orWhere('link_youtube', 'like', "%{$q}%");
+            });
+        }
+
+        $videos = $videosQuery->paginate(10)->appends(['q' => $q]);
+
         return view('admin.videos.index', compact('videos'));
     }
 
