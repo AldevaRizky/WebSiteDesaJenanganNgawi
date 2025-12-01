@@ -13,8 +13,8 @@
                 height: 300px;">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="text-center px-4">
-                <h1 class="text-white text-3xl md:text-5xl font-bold">Infografis Data Penduduk</h1>
-                <p class="text-white/80 mt-2">Visualisasi Data Kependudukan Desa Jenangan</p>
+                <h1 class="text-white text-3xl md:text-5xl font-bold">Infografis Desa Jenangan</h1>
+                <p class="text-white/80 mt-2">Data Kependudukan & Kesehatan Anak</p>
             </div>
         </div>
     </div>
