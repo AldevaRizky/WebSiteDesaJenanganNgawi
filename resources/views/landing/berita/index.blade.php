@@ -12,7 +12,10 @@
                 height: 300px;
                 margin: 0 auto;">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <h1 class="text-white text-3xl md:text-5xl font-bold">Berita Terbaru</h1>
+            <div class="text-center px-4">
+                <h1 class="text-white text-3xl md:text-5xl font-bold">Berita Terbaru</h1>
+                <p class="text-white/80 mt-2">Informasi dan Berita Terkini Desa Jenangan</p>
+            </div>
         </div>
     </div>
 
