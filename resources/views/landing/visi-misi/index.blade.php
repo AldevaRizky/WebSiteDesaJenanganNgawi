@@ -22,6 +22,17 @@
         </div>
     </div>
 
+    <!-- Breadcrumb -->
+    <div class="bg-gray-100 py-4">
+        <div class="container mx-auto px-6 md:px-16">
+            <nav class="text-sm text-gray-600">
+                <a href="{{ route('landing.index') }}" class="hover:text-blue-500">Home</a>
+                <span class="mx-2">/</span>
+                <span class="text-blue-500 font-semibold">Visi dan Misi</span>
+            </nav>
+        </div>
+    </div>
+
     <!-- Content Section -->
     @if($visiMisi)
     <div class="container mx-auto px-4 py-16">

@@ -16,6 +16,17 @@
         </div>
     </div>
 
+    <!-- Breadcrumb -->
+    <div class="bg-gray-100 py-4">
+        <div class="container mx-auto px-6 md:px-16">
+            <nav class="text-sm text-gray-600">
+                <a href="{{ route('landing.index') }}" class="hover:text-blue-500">Home</a>
+                <span class="mx-2">/</span>
+                <span class="text-blue-500 font-semibold">Berita</span>
+            </nav>
+        </div>
+    </div>
+
     <div class="container mx-auto">
         <h2 class="text-4xl font-bold text-gray-800 text-center mt-8 mb-6">Berita Terbaru</h2>
         <div class="w-16 h-1 bg-blue-500 mx-auto mb-8"></div>
