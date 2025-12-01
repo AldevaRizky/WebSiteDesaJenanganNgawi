@@ -239,11 +239,11 @@
                             <div class="flex-shrink-0 w-80 md:w-96 snap-center">
                                 <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
                                     <div class="relative" style="padding-bottom: 56.25%;">
-                                        <iframe 
+                                        <iframe
                                             class="absolute top-0 left-0 w-full h-full"
-                                            src="https://www.youtube.com/embed/{{ $videoId }}" 
-                                            frameborder="0" 
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            src="https://www.youtube.com/embed/{{ $videoId }}"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen>
                                         </iframe>
                                     </div>
