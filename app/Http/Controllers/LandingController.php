@@ -11,6 +11,7 @@ use App\Models\KategoriBerita;
 use App\Models\Umkm;
 use App\Models\Pesan;
 use App\Models\SejarahDesa;
+use App\Models\SambutanKepalaDesa;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -160,5 +161,16 @@ class LandingController extends Controller
         $sejarah = SejarahDesa::first();
 
         return view('landing.sejarah.index', compact('sejarah', 'heroBanner'));
+    }
+
+    public function sambutan()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch sambutan kepala desa
+        $sambutan = SambutanKepalaDesa::first();
+
+        return view('landing.sambutan.index', compact('sambutan', 'heroBanner'));
     }
 }
