@@ -211,6 +211,95 @@
             @endif
         </section>
 
+        <!-- Video Section -->
+        <section id="video" class="py-12 bg-gray-100 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mt-6 mb-6">VIDEO DESA</h2>
+            <div class="w-16 h-1 bg-blue-500 mx-auto mb-12"></div>
+
+            @if($videos->count() > 0)
+            <div class="relative px-6 md:px-16">
+                <!-- Scroll Container -->
+                <div class="flex items-center">
+                    <!-- Left Button -->
+                    <button id="scrollLeft" class="absolute left-0 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-100 transition-all duration-300 ml-2">
+                        <i class='bx bx-chevron-left text-3xl text-gray-700'></i>
+                    </button>
+
+                    <!-- Videos Container -->
+                    <div id="videoContainer" class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-12 scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                        @foreach($videos as $video)
+                            @php
+                                // Extract YouTube video ID
+                                $videoId = null;
+                                if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $video->link_youtube, $matches)) {
+                                    $videoId = $matches[1];
+                                }
+                            @endphp
+                            @if($videoId)
+                            <div class="flex-shrink-0 w-80 md:w-96 snap-center">
+                                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
+                                    <div class="relative" style="padding-bottom: 56.25%;">
+                                        <iframe 
+                                            class="absolute top-0 left-0 w-full h-full"
+                                            src="https://www.youtube.com/embed/{{ $videoId }}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                    <div class="p-4">
+                                        <h3 class="font-semibold text-lg text-gray-800 line-clamp-2">{{ $video->judul }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    <!-- Right Button -->
+                    <button id="scrollRight" class="absolute right-0 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-100 transition-all duration-300 mr-2">
+                        <i class='bx bx-chevron-right text-3xl text-gray-700'></i>
+                    </button>
+                </div>
+            </div>
+
+            <style>
+                #videoContainer::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const container = document.getElementById('videoContainer');
+                    const scrollLeft = document.getElementById('scrollLeft');
+                    const scrollRight = document.getElementById('scrollRight');
+                    const scrollAmount = 400;
+
+                    scrollLeft.addEventListener('click', function() {
+                        container.scrollBy({
+                            left: -scrollAmount,
+                            behavior: 'smooth'
+                        });
+                    });
+
+                    scrollRight.addEventListener('click', function() {
+                        container.scrollBy({
+                            left: scrollAmount,
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+            </script>
+            @else
+            <div class="text-center py-12">
+                <i class='bx bx-video-off' style="font-size: 80px; color: #cbd5e1;"></i>
+                <h4 class="text-gray-500 text-xl font-semibold mt-4">Belum Ada Video</h4>
+                <p class="text-gray-400 mt-2">Video akan ditampilkan di sini ketika sudah tersedia.</p>
+            </div>
+            @endif
+        </section>
+
         <div id="contact" class="container mx-auto px-4 py-12">
             <!-- Section Title -->
             <h2 class="text-4xl font-bold text-gray-800 mt-6 mb-6 text-center">CONTACT</h2>

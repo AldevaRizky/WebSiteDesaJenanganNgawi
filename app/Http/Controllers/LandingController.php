@@ -15,6 +15,7 @@ use App\Models\SambutanKepalaDesa;
 use App\Models\VisiMisi;
 use App\Models\PerangkatDesa;
 use App\Models\BaganImage;
+use App\Models\Video;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -55,7 +56,10 @@ class LandingController extends Controller
             ->limit(3)
             ->get();
 
-        return view('landing.index', compact('heroes', 'logos', 'dataPenduduk', 'berita', 'umkm', 'kategoris'));
+        // Fetch videos
+        $videos = Video::orderBy('created_at', 'desc')->get();
+
+        return view('landing.index', compact('heroes', 'logos', 'dataPenduduk', 'berita', 'umkm', 'kategoris', 'videos'));
     }
 
     public function storeContact(Request $request)
