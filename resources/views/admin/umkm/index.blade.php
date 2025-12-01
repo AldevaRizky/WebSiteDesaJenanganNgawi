@@ -41,7 +41,6 @@
                         <tr>
                             <th>#</th>
                             <th>Nama</th>
-                            <th>Deskripsi</th>
                             <th>Alamat</th>
                             <th>Gambar</th>
                             <th>Tanggal</th>
@@ -53,7 +52,6 @@
                         <tr>
                             <td>{{ $loop->iteration + ($umkms->currentPage() - 1) * $umkms->perPage() }}</td>
                             <td>{{ $umkm->nama }}</td>
-                            <td>{{ Str::limit(strip_tags($umkm->deskripsi ?? '-'), 60) }}</td>
                             <td>{{ Str::limit($umkm->alamat ?? '-', 50) }}</td>
                             <td>
                                 @if($umkm->images->count() > 0)
@@ -80,7 +78,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center">Tidak ada data UMKM</td>
+                            <td colspan="6" class="text-center">Tidak ada data UMKM</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -289,26 +287,47 @@
     var addCKEditor;
     var editCKEditors = {};
 
+    // Fix untuk CKEditor dialog di dalam Bootstrap modal
+    document.addEventListener('DOMContentLoaded', function() {
+        // Override Bootstrap modal focus
+        if (typeof $.fn.modal !== 'undefined') {
+            $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+        }
+    });
+
     // CKEditor configuration
     var ckConfig = {
         height: 300,
         versionCheck: false,
         filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+        filebrowserUploadMethod: 'form',
         filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
         uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
-        toolbar: [
-            { name: 'clipboard', items: ['Undo', 'Redo'] },
-            { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
-            { name: 'colors', items: ['TextColor', 'BGColor'] },
+
+        // Toolbar configuration lengkap seperti berita
+        toolbarGroups: [
+            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+            { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+            { name: 'forms', groups: [ 'forms' ] },
             '/',
-            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-            { name: 'links', items: ['Link', 'Unlink'] },
-            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
-            { name: 'tools', items: ['Maximize'] }
+            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+            { name: 'links', groups: [ 'links' ] },
+            { name: 'insert', groups: [ 'insert' ] },
+            '/',
+            { name: 'styles', groups: [ 'styles' ] },
+            { name: 'colors', groups: [ 'colors' ] },
+            { name: 'tools', groups: [ 'tools' ] },
+            { name: 'others', groups: [ 'others' ] },
+            { name: 'about', groups: [ 'about' ] }
         ],
-        allowedContent: true,
-        removeDialogTabs: 'image:advanced;link:advanced'
+
+        // Remove unused buttons
+        removeButtons: 'Save,NewPage,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Subscript,Superscript,CopyFormatting,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,PageBreak,Iframe,ShowBlocks,About',
+
+        // Allow all content
+        allowedContent: true
     };
 
     // Add Modal CKEditor initialization
