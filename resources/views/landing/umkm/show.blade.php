@@ -57,7 +57,9 @@
                             <i class='bx bx-info-circle text-blue-500 text-2xl mr-2'></i>
                             Deskripsi
                         </h3>
-                        <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ $umkm->deskripsi }}</p>
+                        <div class="prose prose-lg max-w-none text-gray-600 leading-relaxed">
+                            {!! $umkm->deskripsi !!}
+                        </div>
                     </div>
 
                     <!-- Alamat -->
@@ -134,7 +136,7 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h4 class="font-semibold text-gray-800 line-clamp-2 text-sm mb-1 group-hover:text-blue-500 transition-colors">{{ $related->nama }}</h4>
-                                    <p class="text-xs text-gray-500 line-clamp-2">{{ Str::limit($related->deskripsi, 50) }}</p>
+                                    <p class="text-xs text-gray-500 line-clamp-2">{{ Str::limit(strip_tags($related->deskripsi), 50) }}</p>
                                 </div>
                             </div>
                         </a>

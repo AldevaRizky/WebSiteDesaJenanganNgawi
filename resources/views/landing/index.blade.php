@@ -141,7 +141,9 @@
                         <h3 class="font-bold text-xl text-gray-800 mb-3 line-clamp-2 min-h-[3.5rem]">{{ $item->nama }}</h3>
 
                         <!-- Deskripsi -->
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{{ $item->deskripsi }}</p>
+                        <div class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow prose prose-sm max-w-none">
+                            {!! Str::limit(strip_tags($item->deskripsi), 150) !!}
+                        </div>
 
                         <!-- Alamat -->
                         @if($item->alamat)
