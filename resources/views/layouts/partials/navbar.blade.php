@@ -16,25 +16,21 @@
         </li>
         <li class="dropdown">
             <a href="#" id="tentangKami"
-               class="navbar-text hover:text-blue-400 large {{ Request::is('tentang-kami*') ? 'active' : '' }}">
+               class="navbar-text hover:text-blue-400 large {{ Request::is('sejarah-desa') || Request::is('sambutan-kepala-desa') || Request::is('visi-misi') ? 'active' : '' }}">
                Tentang Kami
             </a>
             <div class="dropdown-menu">
-                <a href="#"
-                   class="{{ Request::is('tentang-kami/sejarah-desa') ? 'active' : '' }}">
+                <a href="{{ route('landing.sejarah') }}"
+                   class="{{ Request::is('sejarah-desa') ? 'active' : '' }}">
                    Sejarah Desa
                 </a>
-                <a href="#"
-                   class="{{ Request::is('tentang-kami/sambutan') ? 'active' : '' }}">
+                <a href="{{ route('landing.sambutan') }}"
+                   class="{{ Request::is('sambutan-kepala-desa') ? 'active' : '' }}">
                    Sambutan Kepala Desa
                 </a>
-                <a href="#"
-                   class="{{ Request::is('tentang-kami/visi-misi') ? 'active' : '' }}">
+                <a href="{{ route('landing.visi-misi') }}"
+                   class="{{ Request::is('visi-misi') ? 'active' : '' }}">
                    Visi & Misi
-                </a>
-                <a href="#"
-                   class="{{ Request::is('tentang-kami/fasilitas') ? 'active' : '' }}">
-                   Fasilitas
                 </a>
             </div>
         </li>
@@ -50,10 +46,16 @@
                UMKM
             </a>
         </li>
-                <li>
-            <a href="#"
+        <li>
+            <a href="{{ route('landing.infografis') }}"
                class="navbar-text hover:text-blue-400 large {{ Request::is('infografis') ? 'active' : '' }}">
                Infografis
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('landing.sotk') }}"
+               class="navbar-text hover:text-blue-400 large {{ Request::is('sotk') ? 'active' : '' }}">
+               SOTK
             </a>
         </li>
     </ul>
@@ -95,43 +97,39 @@
     </a>
     <div class="py-2 border-b border-gray-600 relative">
         <a href="#" id="mobileTentangKami"
-           class="block {{ Request::is('tentang-kami*') ? 'active' : '' }}">
+           class="block {{ Request::is('sejarah-desa') || Request::is('sambutan-kepala-desa') || Request::is('visi-misi') ? 'active' : '' }}">
            Tentang Kami
         </a>
         <div class="dropdown-menu absolute left-0 w-full bg-gray-700 hidden">
-            <a href="#"
-               class="block px-4 py-2 {{ Request::is('tentang-kami/sejarah-sekolah') ? 'active' : '' }}">
-               Sejarah Sekolah
+            <a href="{{ route('landing.sejarah') }}"
+               class="block px-4 py-2 {{ Request::is('sejarah-desa') ? 'active' : '' }}">
+               Sejarah Desa
             </a>
-            <a href="#"
-               class="block px-4 py-2 {{ Request::is('tentang-kami/sambutan') ? 'active' : '' }}">
-               Sambutan Kepala Sekolah
+            <a href="{{ route('landing.sambutan') }}"
+               class="block px-4 py-2 {{ Request::is('sambutan-kepala-desa') ? 'active' : '' }}">
+               Sambutan Kepala Desa
             </a>
-            <a href="#"
-               class="block px-4 py-2 {{ Request::is('tentang-kami/visi-misi') ? 'active' : '' }}">
+            <a href="{{ route('landing.visi-misi') }}"
+               class="block px-4 py-2 {{ Request::is('visi-misi') ? 'active' : '' }}">
                Visi & Misi
-            </a>
-            <a href="#"
-               class="block px-4 py-2 {{ Request::is('tentang-kami/fasilitas') ? 'active' : '' }}">
-               Fasilitas
             </a>
         </div>
     </div>
-     <a href="#"
-         class="py-2 border-b border-gray-600 {{ Request::is('ekstrakurikuler') ? 'active' : '' }}">
-         Ekstrakurikuler
-     </a>
-    <a href="#"
+    <a href="{{ route('landing.berita') }}"
        class="py-2 border-b border-gray-600 {{ Request::is('berita') ? 'active' : '' }}">
        Berita
     </a>
-    <a href="#"
-       class="py-2 border-b border-gray-600 {{ Request::is('prestasi') ? 'active' : '' }}">
-       Prestasi
+    <a href="{{ route('landing.umkm') }}"
+       class="py-2 border-b border-gray-600 {{ Request::is('umkm') ? 'active' : '' }}">
+       UMKM
     </a>
-    <a href="#"
-       class="py-2 border-b border-gray-600 {{ Request::is('ppdb') ? 'active' : '' }}">
-       PPDB
+    <a href="{{ route('landing.infografis') }}"
+       class="py-2 border-b border-gray-600 {{ Request::is('infografis') ? 'active' : '' }}">
+       Infografis
+    </a>
+    <a href="{{ route('landing.sotk') }}"
+       class="py-2 border-b border-gray-600 {{ Request::is('sotk') ? 'active' : '' }}">
+       SOTK
     </a>
     @if (Auth::check())
         <a href="{{ $redirectRoute }}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white text-sm mt-4 w-full text-center">Dashboard</a>
