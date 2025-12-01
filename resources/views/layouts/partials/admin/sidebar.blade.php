@@ -146,6 +146,14 @@
             </ul>
         </li>
 
+        <!-- Data Stunting -->
+        <li class="menu-item {{ request()->routeIs('admin.data_stunting.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.data_stunting.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-health"></i>
+                <div class="text-truncate">Data Stunting</div>
+            </a>
+        </li>
+
         <!-- Users -->
         <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             <a href="{{ route('admin.users.index') }}" class="menu-link">

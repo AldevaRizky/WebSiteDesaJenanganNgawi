@@ -277,6 +277,234 @@
     </div>
 </section>
 
+<!-- Data Stunting Section -->
+@if($stuntingStats)
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-6 md:px-16">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Data Stunting Anak</h2>
+            <div class="w-16 h-1 bg-red-500 mx-auto mb-4"></div>
+            <p class="text-gray-600">Monitoring Status Gizi dan Pertumbuhan Anak</p>
+        </div>
+
+        <!-- Stunting Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Total Anak -->
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class='bx bx-child text-4xl'></i>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white/80 text-sm font-medium">Total</p>
+                        <p class="text-3xl font-bold">{{ $stuntingStats['total'] }}</p>
+                    </div>
+                </div>
+                <p class="text-white/90 font-semibold">Total Anak</p>
+                <div class="mt-2 h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- Normal -->
+            <div class="bg-gradient-to-br from-green-500 to-green-700 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class='bx bx-check-circle text-4xl'></i>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white/80 text-sm font-medium">{{ $stuntingStats['persentase_normal'] }}%</p>
+                        <p class="text-3xl font-bold">{{ $stuntingStats['normal'] }}</p>
+                    </div>
+                </div>
+                <p class="text-white/90 font-semibold">Status Normal</p>
+                <div class="mt-2 h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full" style="width: {{ $stuntingStats['persentase_normal'] }}%"></div>
+                </div>
+            </div>
+
+            <!-- Stunting -->
+            <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class='bx bx-error-circle text-4xl'></i>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white/80 text-sm font-medium">{{ $stuntingStats['persentase_stunting'] }}%</p>
+                        <p class="text-3xl font-bold">{{ $stuntingStats['stunting'] }}</p>
+                    </div>
+                </div>
+                <p class="text-white/90 font-semibold">Stunting</p>
+                <div class="mt-2 h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full" style="width: {{ $stuntingStats['persentase_stunting'] }}%"></div>
+                </div>
+            </div>
+
+            <!-- Stunting Berat -->
+            <div class="bg-gradient-to-br from-red-500 to-red-700 rounded-2xl shadow-xl p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class='bx bx-x-circle text-4xl'></i>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white/80 text-sm font-medium">{{ $stuntingStats['persentase_severely_stunting'] }}%</p>
+                        <p class="text-3xl font-bold">{{ $stuntingStats['severely_stunting'] }}</p>
+                    </div>
+                </div>
+                <p class="text-white/90 font-semibold">Stunting Berat</p>
+                <div class="mt-2 h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full" style="width: {{ $stuntingStats['persentase_severely_stunting'] }}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stunting Chart Visualization -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Donut Chart -->
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Distribusi Status Gizi</h3>
+                <div class="flex items-center justify-center mb-6">
+                    <div class="relative" style="width: 250px; height: 250px;">
+                        @php
+                            $normalDeg = $stuntingStats['persentase_normal'] * 3.6;
+                            $stuntingDeg = $stuntingStats['persentase_stunting'] * 3.6;
+                            $severelyDeg = $stuntingStats['persentase_severely_stunting'] * 3.6;
+                            $tinggiDeg = $stuntingStats['persentase_tinggi'] * 3.6;
+
+                            $start1 = 0;
+                            $end1 = $normalDeg;
+                            $start2 = $end1;
+                            $end2 = $start2 + $stuntingDeg;
+                            $start3 = $end2;
+                            $end3 = $start3 + $severelyDeg;
+                            $start4 = $end3;
+                            $end4 = 360;
+                        @endphp
+                        <div class="w-full h-full rounded-full" style="background: conic-gradient(
+                            from 0deg,
+                            #10b981 {{ $start1 }}deg {{ $end1 }}deg,
+                            #f59e0b {{ $start2 }}deg {{ $end2 }}deg,
+                            #ef4444 {{ $start3 }}deg {{ $end3 }}deg,
+                            #3b82f6 {{ $start4 }}deg {{ $end4 }}deg
+                        );"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-white rounded-full w-32 h-32 flex items-center justify-center shadow-lg">
+                                <div class="text-center">
+                                    <p class="text-3xl font-bold text-gray-800">{{ $stuntingStats['total'] }}</p>
+                                    <p class="text-xs text-gray-600">Anak</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                            <span class="font-semibold text-gray-700">Normal</span>
+                        </div>
+                        <span class="font-bold text-green-700">{{ $stuntingStats['persentase_normal'] }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
+                            <span class="font-semibold text-gray-700">Stunting</span>
+                        </div>
+                        <span class="font-bold text-yellow-700">{{ $stuntingStats['persentase_stunting'] }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-500 rounded-full mr-3"></div>
+                            <span class="font-semibold text-gray-700">Stunting Berat</span>
+                        </div>
+                        <span class="font-bold text-red-700">{{ $stuntingStats['persentase_severely_stunting'] }}%</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full mr-3"></div>
+                            <span class="font-semibold text-gray-700">Tinggi</span>
+                        </div>
+                        <span class="font-bold text-blue-700">{{ $stuntingStats['persentase_tinggi'] }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Measurements -->
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Rata-rata Pengukuran</h3>
+                <div class="space-y-6">
+                    <!-- Tinggi Badan -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center">
+                                <i class='bx bx-ruler text-2xl text-blue-500 mr-2'></i>
+                                <span class="font-semibold text-gray-700">Tinggi Badan</span>
+                            </div>
+                            <span class="font-bold text-blue-700">{{ $stuntingStats['rata_tinggi_badan'] }} cm</span>
+                        </div>
+                        <div class="relative h-8 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-end px-4" style="width: {{ min(($stuntingStats['rata_tinggi_badan'] / 120) * 100, 100) }}%">
+                                <span class="text-white font-bold text-xs">{{ $stuntingStats['rata_tinggi_badan'] }} cm</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Rata-rata tinggi badan anak</p>
+                    </div>
+
+                    <!-- Berat Badan -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center">
+                                <i class='bx bx-dumbbell text-2xl text-green-500 mr-2'></i>
+                                <span class="font-semibold text-gray-700">Berat Badan</span>
+                            </div>
+                            <span class="font-bold text-green-700">{{ $stuntingStats['rata_berat_badan'] }} kg</span>
+                        </div>
+                        <div class="relative h-8 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-end px-4" style="width: {{ min(($stuntingStats['rata_berat_badan'] / 25) * 100, 100) }}%">
+                                <span class="text-white font-bold text-xs">{{ $stuntingStats['rata_berat_badan'] }} kg</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Rata-rata berat badan anak</p>
+                    </div>
+
+                    <!-- Info Cards -->
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border-l-4 border-purple-500">
+                            <div class="flex items-center mb-2">
+                                <i class='bx bx-trending-up text-2xl text-purple-600 mr-2'></i>
+                                <p class="text-xs text-gray-600">Total Data</p>
+                            </div>
+                            <p class="text-2xl font-bold text-purple-700">{{ $stuntingStats['total'] }}</p>
+                            <p class="text-xs text-gray-600 mt-1">Pengukuran</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-4 border-l-4 border-indigo-500">
+                            <div class="flex items-center mb-2">
+                                <i class='bx bx-heart text-2xl text-indigo-600 mr-2'></i>
+                                <p class="text-xs text-gray-600">Tinggi</p>
+                            </div>
+                            <p class="text-2xl font-bold text-indigo-700">{{ $stuntingStats['tinggi'] }}</p>
+                            <p class="text-xs text-gray-600 mt-1">Anak</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning Info -->
+        <div class="bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-500 rounded-lg p-6">
+            <div class="flex items-start">
+                <i class='bx bx-info-circle text-3xl text-orange-500 mr-4 mt-1'></i>
+                <div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">Tentang Stunting</h4>
+                    <p class="text-gray-700 mb-2">Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis, terutama pada 1.000 hari pertama kehidupan.</p>
+                    <p class="text-gray-700">Data ini penting untuk memantau status gizi anak dan melakukan intervensi dini untuk mencegah stunting.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
 @else
 <!-- No Data Section -->
 <section class="py-20 bg-gray-50">

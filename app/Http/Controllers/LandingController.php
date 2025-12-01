@@ -224,6 +224,32 @@ class LandingController extends Controller
             ];
         }
 
-        return view('landing.infografis.index', compact('data', 'heroBanner'));
+        // Fetch data stunting statistics
+        $dataStunting = \App\Models\DataStunting::all();
+        $stuntingStats = null;
+
+        if ($dataStunting->count() > 0) {
+            $totalData = $dataStunting->count();
+            $normal = $dataStunting->where('status_stunting', 'normal')->count();
+            $stunting = $dataStunting->where('status_stunting', 'stunting')->count();
+            $severelyStunting = $dataStunting->where('status_stunting', 'severely_stunting')->count();
+            $tinggi = $dataStunting->where('status_stunting', 'tinggi')->count();
+
+            $stuntingStats = [
+                'total' => $totalData,
+                'normal' => $normal,
+                'stunting' => $stunting,
+                'severely_stunting' => $severelyStunting,
+                'tinggi' => $tinggi,
+                'persentase_normal' => round(($normal / $totalData) * 100, 1),
+                'persentase_stunting' => round(($stunting / $totalData) * 100, 1),
+                'persentase_severely_stunting' => round(($severelyStunting / $totalData) * 100, 1),
+                'persentase_tinggi' => round(($tinggi / $totalData) * 100, 1),
+                'rata_tinggi_badan' => round($dataStunting->avg('tinggi_badan_cm'), 1),
+                'rata_berat_badan' => round($dataStunting->avg('berat_badan'), 1),
+            ];
+        }
+
+        return view('landing.infografis.index', compact('data', 'heroBanner', 'stuntingStats'));
     }
 }

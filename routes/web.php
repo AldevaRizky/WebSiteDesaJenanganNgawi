@@ -62,6 +62,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::put('perangkat/bagan/{id}', [\App\Http\Controllers\Admin\BaganController::class, 'update'])->name('perangkat.bagan.update');
     Route::delete('perangkat/bagan/{id}', [\App\Http\Controllers\Admin\BaganController::class, 'destroy'])->name('perangkat.bagan.destroy');
     Route::resource('perangkat', \App\Http\Controllers\Admin\PerangkatDesaController::class);
+    // Data Stunting CRUD
+    Route::resource('data_stunting', \App\Http\Controllers\Admin\DataStuntingController::class)->except(['show', 'create', 'edit']);
     // Pesan (messages) admin view
     Route::resource('pesans', \App\Http\Controllers\Admin\PesanController::class)->only(['index', 'destroy']);
     // Users admin CRUD
