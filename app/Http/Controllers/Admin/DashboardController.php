@@ -9,6 +9,8 @@ use App\Models\PerangkatDesa;
 use App\Models\Umkm;
 use App\Models\User;
 use App\Models\DataPenduduk;
+use App\Models\DataStunting;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,6 +26,8 @@ class DashboardController extends Controller
             'total_pesan' => Pesan::count(),
             'pesan_unread' => Pesan::whereDate('created_at', '>=', now()->subDays(7))->count(),
             'total_users' => User::count(),
+            'total_stunting' => DataStunting::count(),
+            'total_videos' => Video::count(),
         ];
 
         // Data penduduk
@@ -56,13 +60,35 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get();
 
+        // Data Stunting statistics
+        $stuntingStats = [
+            'total' => DataStunting::count(),
+            'normal' => DataStunting::where('status_stunting', 'normal')->count(),
+            'stunting' => DataStunting::where('status_stunting', 'stunting')->count(),
+            'severely_stunting' => DataStunting::where('status_stunting', 'severely_stunting')->count(),
+            'tinggi' => DataStunting::where('status_stunting', 'tinggi')->count(),
+        ];
+
+        // Recent stunting data
+        $recentStunting = DataStunting::orderBy('tanggal_pengukuran', 'desc')
+            ->limit(5)
+            ->get();
+
+        // Recent videos
+        $recentVideos = Video::orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
         return view('admin.dashboard', compact(
             'stats',
             'dataPenduduk',
             'recentBerita',
             'recentPesan',
             'beritaPerKategori',
-            'monthlyBerita'
+            'monthlyBerita',
+            'stuntingStats',
+            'recentStunting',
+            'recentVideos'
         ));
     }
 }
