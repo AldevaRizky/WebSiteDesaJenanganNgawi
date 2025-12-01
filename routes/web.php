@@ -64,6 +64,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('perangkat', \App\Http\Controllers\Admin\PerangkatDesaController::class);
     // Data Stunting CRUD
     Route::resource('data_stunting', \App\Http\Controllers\Admin\DataStuntingController::class)->except(['show', 'create', 'edit']);
+    // Videos CRUD
+    Route::resource('videos', \App\Http\Controllers\Admin\VideoController::class)->except(['show', 'create', 'edit']);
     // Pesan (messages) admin view
     Route::resource('pesans', \App\Http\Controllers\Admin\PesanController::class)->only(['index', 'destroy']);
     // Users admin CRUD

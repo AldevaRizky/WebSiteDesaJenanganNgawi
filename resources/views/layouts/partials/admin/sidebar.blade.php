@@ -154,6 +154,14 @@
             </a>
         </li>
 
+        <!-- Videos -->
+        <li class="menu-item {{ request()->routeIs('admin.videos.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.videos.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-video"></i>
+                <div class="text-truncate">Video</div>
+            </a>
+        </li>
+
         <!-- Users -->
         <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             <a href="{{ route('admin.users.index') }}" class="menu-link">
