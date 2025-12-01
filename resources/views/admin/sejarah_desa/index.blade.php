@@ -48,7 +48,7 @@
                             </tr>
                             <tr>
                                 <th>Deskripsi</th>
-                                <td>{{ $sejarah->deskripsi }}</td>
+                                <td>{!! $sejarah->deskripsi !!}</td>
                             </tr>
                             <tr>
                                 <th>Aksi</th>
@@ -73,7 +73,7 @@
 
 <!-- Modal Tambah -->
 <div class="modal fade" id="addSejarahModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('admin.sejarah_desa.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
@@ -99,7 +99,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required></textarea>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="10"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -114,7 +114,7 @@
 <!-- Modal Edit -->
 @if ($sejarah)
 <div class="modal fade" id="editSejarahModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('admin.sejarah_desa.update', $sejarah->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -141,7 +141,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit_deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="4" required>{{ $sejarah->deskripsi }}</textarea>
+                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="10">{{ $sejarah->deskripsi }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -154,8 +154,16 @@
 </div>
 @endif
 
+<!-- CKEditor Script -->
+<script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Disable version check warning
+    CKEDITOR.config.versionCheck = false;
+
+    var addCKEditor, editCKEditor;
+
+    // Image preview handling
     var editPreview = document.getElementById('editSejarahPreview');
     if (editPreview) editPreview.dataset.originalSrc = editPreview.src || '';
 
@@ -181,13 +189,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Add Modal CKEditor initialization
     var addModal = document.getElementById('addSejarahModal');
     if (addModal) {
+        addModal.addEventListener('shown.bs.modal', function () {
+            if (!addCKEditor) {
+                addCKEditor = CKEDITOR.replace('deskripsi', {
+                    height: 300,
+                    versionCheck: false,
+                    filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    toolbar: [
+                        { name: 'clipboard', items: ['Undo', 'Redo'] },
+                        { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+                        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                        { name: 'colors', items: ['TextColor', 'BGColor'] },
+                        '/',
+                        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                        { name: 'links', items: ['Link', 'Unlink'] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
+                        { name: 'tools', items: ['Maximize'] }
+                    ],
+                    allowedContent: true,
+                    removeDialogTabs: 'image:advanced;link:advanced'
+                });
+            }
+        });
+
         addModal.addEventListener('hidden.bs.modal', function () {
             var preview = document.getElementById('addSejarahPreview');
             var input = document.getElementById('addSejarahGambar');
             if (preview) { preview.src = '#'; preview.style.display = 'none'; }
             if (input) input.value = '';
+
+            // Destroy CKEditor instance
+            if (addCKEditor) {
+                addCKEditor.destroy();
+                addCKEditor = null;
+            }
+        });
+    }
+
+    // Edit Modal CKEditor initialization
+    var editModal = document.getElementById('editSejarahModal');
+    if (editModal) {
+        editModal.addEventListener('shown.bs.modal', function () {
+            if (!editCKEditor) {
+                editCKEditor = CKEDITOR.replace('edit_deskripsi', {
+                    height: 300,
+                    versionCheck: false,
+                    filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    toolbar: [
+                        { name: 'clipboard', items: ['Undo', 'Redo'] },
+                        { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+                        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                        { name: 'colors', items: ['TextColor', 'BGColor'] },
+                        '/',
+                        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                        { name: 'links', items: ['Link', 'Unlink'] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
+                        { name: 'tools', items: ['Maximize'] }
+                    ],
+                    allowedContent: true,
+                    removeDialogTabs: 'image:advanced;link:advanced'
+                });
+            }
+        });
+
+        editModal.addEventListener('hidden.bs.modal', function () {
+            // Destroy CKEditor instance
+            if (editCKEditor) {
+                editCKEditor.destroy();
+                editCKEditor = null;
+            }
         });
     }
 });
