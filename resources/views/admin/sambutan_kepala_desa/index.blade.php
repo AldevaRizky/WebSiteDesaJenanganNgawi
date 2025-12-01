@@ -48,7 +48,7 @@
                             </tr>
                             <tr>
                                 <th>Deskripsi</th>
-                                <td>{{ $sambutan->deskripsi }}</td>
+                                <td>{!! $sambutan->deskripsi !!}</td>
                             </tr>
                             <tr>
                                 <th>Aksi</th>
@@ -73,7 +73,7 @@
 
 <!-- Modal Tambah -->
 <div class="modal fade" id="addSambutanModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('admin.sambutan_kepala_desa.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
@@ -99,7 +99,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required></textarea>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="10"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -114,7 +114,7 @@
 <!-- Modal Edit -->
 @if ($sambutan)
 <div class="modal fade" id="editSambutanModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('admin.sambutan_kepala_desa.update', $sambutan->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -125,23 +125,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="judul" class="form-label">Judul</label>
-                        <input type="text" class="form-control" id="judul" name="judul" value="{{ $sambutan->judul }}" required>
+                        <label for="edit_judul" class="form-label">Judul</label>
+                        <input type="text" class="form-control" id="edit_judul" name="judul" value="{{ $sambutan->judul }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="subjudul" class="form-label">Subjudul</label>
-                        <input type="text" class="form-control" id="subjudul" name="subjudul" value="{{ $sambutan->subjudul }}">
+                        <label for="edit_subjudul" class="form-label">Subjudul</label>
+                        <input type="text" class="form-control" id="edit_subjudul" name="subjudul" value="{{ $sambutan->subjudul }}">
                     </div>
                     <div class="mb-3">
-                        <label for="gambar" class="form-label">Gambar</label>
+                        <label for="edit_gambar" class="form-label">Gambar</label>
                         <input type="file" class="form-control sambutan-file-input" id="editSambutanGambar" name="gambar" data-preview="editSambutanPreview" accept="image/*">
                         <div class="mt-2">
                             <img id="editSambutanPreview" src="{{ Storage::url($sambutan->gambar) }}" alt="Current Image" class="img-fluid" style="max-width: 300px;" />
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required>{{ $sambutan->deskripsi }}</textarea>
+                        <label for="edit_deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="10">{{ $sambutan->deskripsi }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -154,8 +154,16 @@
 </div>
 @endif
 
+<!-- CKEditor Script -->
+<script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Disable version check warning
+    CKEDITOR.config.versionCheck = false;
+
+    var addCKEditor, editCKEditor;
+
+    // Image preview handling
     var editPreview = document.getElementById('editSambutanPreview');
     if (editPreview) editPreview.dataset.originalSrc = editPreview.src || '';
 
@@ -181,13 +189,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Add Modal CKEditor initialization
     var addModal = document.getElementById('addSambutanModal');
     if (addModal) {
+        addModal.addEventListener('shown.bs.modal', function () {
+            if (!addCKEditor) {
+                addCKEditor = CKEDITOR.replace('deskripsi', {
+                    height: 300,
+                    versionCheck: false,
+                    filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    toolbar: [
+                        { name: 'clipboard', items: ['Undo', 'Redo'] },
+                        { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+                        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                        { name: 'colors', items: ['TextColor', 'BGColor'] },
+                        '/',
+                        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                        { name: 'links', items: ['Link', 'Unlink'] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
+                        { name: 'tools', items: ['Maximize'] }
+                    ],
+                    allowedContent: true,
+                    removeDialogTabs: 'image:advanced;link:advanced'
+                });
+            }
+        });
+
         addModal.addEventListener('hidden.bs.modal', function () {
             var preview = document.getElementById('addSambutanPreview');
             var input = document.getElementById('addSambutanGambar');
             if (preview) { preview.src = '#'; preview.style.display = 'none'; }
             if (input) input.value = '';
+
+            // Destroy CKEditor instance
+            if (addCKEditor) {
+                addCKEditor.destroy();
+                addCKEditor = null;
+            }
+        });
+    }
+
+    // Edit Modal CKEditor initialization
+    var editModal = document.getElementById('editSambutanModal');
+    if (editModal) {
+        editModal.addEventListener('shown.bs.modal', function () {
+            if (!editCKEditor) {
+                editCKEditor = CKEDITOR.replace('edit_deskripsi', {
+                    height: 300,
+                    versionCheck: false,
+                    filebrowserUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    filebrowserImageUploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    uploadUrl: "{{ route('admin.ckeditor.upload') }}?_token={{ csrf_token() }}",
+                    toolbar: [
+                        { name: 'clipboard', items: ['Undo', 'Redo'] },
+                        { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+                        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                        { name: 'colors', items: ['TextColor', 'BGColor'] },
+                        '/',
+                        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                        { name: 'links', items: ['Link', 'Unlink'] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] },
+                        { name: 'tools', items: ['Maximize'] }
+                    ],
+                    allowedContent: true,
+                    removeDialogTabs: 'image:advanced;link:advanced'
+                });
+            }
+        });
+
+        editModal.addEventListener('hidden.bs.modal', function () {
+            // Destroy CKEditor instance
+            if (editCKEditor) {
+                editCKEditor.destroy();
+                editCKEditor = null;
+            }
         });
     }
 });
