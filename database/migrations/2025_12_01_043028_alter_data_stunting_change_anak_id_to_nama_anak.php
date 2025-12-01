@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -11,9 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('data_stunting', function (Blueprint $table) {
-            $table->renameColumn('anak_id', 'nama_anak');
-        });
+        if (Schema::hasTable('data_stunting') && Schema::hasColumn('data_stunting', 'anak_id')) {
+            // Use CHANGE which works on older MySQL/MariaDB versions
+            DB::statement("ALTER TABLE `data_stunting` CHANGE `anak_id` `nama_anak` VARCHAR(255) NOT NULL");
+        }
     }
 
     /**
@@ -21,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('data_stunting', function (Blueprint $table) {
-            $table->renameColumn('nama_anak', 'anak_id');
-        });
+        if (Schema::hasTable('data_stunting') && Schema::hasColumn('data_stunting', 'nama_anak')) {
+            DB::statement("ALTER TABLE `data_stunting` CHANGE `nama_anak` `anak_id` VARCHAR(255) NOT NULL");
+        }
     }
 };
