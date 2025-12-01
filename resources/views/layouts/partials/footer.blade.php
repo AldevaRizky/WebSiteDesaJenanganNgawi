@@ -91,7 +91,7 @@
         <!-- Footer Bottom -->
         <div class="border-t border-gray-700 mt-8 pt-4 text-center">
         <p class="text-gray-400">
-            &copy; {{ date('Y') }} Pemerintah Desa Jenangan. All rights reserved. Powered by Euphemia.
+            &copy; {{ date('Y') }} Pemerintah Desa Jenangan. All rights reserved. Powered by KKN-T UNIPMA 2025.
         </p>
         </div>
     </footer>
