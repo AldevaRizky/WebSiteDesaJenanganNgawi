@@ -19,6 +19,7 @@ Route::get('/berita', [\App\Http\Controllers\LandingController::class, 'berita']
 Route::get('/berita/{slug}', [\App\Http\Controllers\LandingController::class, 'detailBerita'])->name('landing.detail-berita');
 Route::get('/umkm', [\App\Http\Controllers\LandingController::class, 'umkm'])->name('landing.umkm');
 Route::get('/umkm/{id}', [\App\Http\Controllers\LandingController::class, 'detailUmkm'])->name('landing.umkm.show');
+Route::get('/sejarah-desa', [\App\Http\Controllers\LandingController::class, 'sejarah'])->name('landing.sejarah');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'storeContact'])->name('landing.contact');
 
 Route::get('/dashboard', function () {
