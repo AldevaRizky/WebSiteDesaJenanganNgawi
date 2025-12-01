@@ -12,6 +12,7 @@ use App\Models\Umkm;
 use App\Models\Pesan;
 use App\Models\SejarahDesa;
 use App\Models\SambutanKepalaDesa;
+use App\Models\VisiMisi;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -172,5 +173,16 @@ class LandingController extends Controller
         $sambutan = SambutanKepalaDesa::first();
 
         return view('landing.sambutan.index', compact('sambutan', 'heroBanner'));
+    }
+
+    public function visiMisi()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch visi dan misi
+        $visiMisi = VisiMisi::first();
+
+        return view('landing.visi-misi.index', compact('visiMisi', 'heroBanner'));
     }
 }

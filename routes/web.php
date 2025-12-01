@@ -21,6 +21,7 @@ Route::get('/umkm', [\App\Http\Controllers\LandingController::class, 'umkm'])->n
 Route::get('/umkm/{id}', [\App\Http\Controllers\LandingController::class, 'detailUmkm'])->name('landing.umkm.show');
 Route::get('/sejarah-desa', [\App\Http\Controllers\LandingController::class, 'sejarah'])->name('landing.sejarah');
 Route::get('/sambutan-kepala-desa', [\App\Http\Controllers\LandingController::class, 'sambutan'])->name('landing.sambutan');
+Route::get('/visi-misi', [\App\Http\Controllers\LandingController::class, 'visiMisi'])->name('landing.visi-misi');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'storeContact'])->name('landing.contact');
 
 Route::get('/dashboard', function () {
