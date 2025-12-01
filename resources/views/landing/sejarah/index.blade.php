@@ -3,6 +3,68 @@
 @section('title', 'Desa Jenangan | Sejarah Desa')
 
 @section('content')
+<style>
+    /* CKEditor Content Styling */
+    .ckeditor-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .ckeditor-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .ckeditor-content li {
+        margin-bottom: 0.5rem;
+    }
+    .ckeditor-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+    .ckeditor-content table td,
+    .ckeditor-content table th {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+    }
+    .ckeditor-content table th {
+        background-color: #f3f4f6;
+        font-weight: bold;
+    }
+    .ckeditor-content p {
+        margin-bottom: 1rem;
+    }
+    .ckeditor-content h1, .ckeditor-content h2, .ckeditor-content h3,
+    .ckeditor-content h4, .ckeditor-content h5, .ckeditor-content h6 {
+        font-weight: bold;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .ckeditor-content h1 { font-size: 2rem; }
+    .ckeditor-content h2 { font-size: 1.75rem; }
+    .ckeditor-content h3 { font-size: 1.5rem; }
+    .ckeditor-content h4 { font-size: 1.25rem; }
+    .ckeditor-content strong { font-weight: bold; }
+    .ckeditor-content em { font-style: italic; }
+    .ckeditor-content u { text-decoration: underline; }
+    .ckeditor-content a {
+        color: #3b82f6;
+        text-decoration: underline;
+    }
+    .ckeditor-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 1rem 0;
+    }
+    .ckeditor-content blockquote {
+        border-left: 4px solid #d1d5db;
+        padding-left: 1rem;
+        margin: 1rem 0;
+        font-style: italic;
+        color: #6b7280;
+    }
+</style>
 <div class="bg-gray-100">
     <!-- Hero Banner -->
     <div class="relative bg-cover bg-center h-64"
@@ -39,7 +101,7 @@
 
             <!-- Description -->
             <div>
-                <div class="prose max-w-none">
+                <div class="prose max-w-none ckeditor-content">
                     <div class="text-gray-700 leading-relaxed" style="text-align: justify;">
                         {!! $sejarah->deskripsi !!}
                     </div>
