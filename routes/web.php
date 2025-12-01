@@ -23,6 +23,7 @@ Route::get('/sejarah-desa', [\App\Http\Controllers\LandingController::class, 'se
 Route::get('/sambutan-kepala-desa', [\App\Http\Controllers\LandingController::class, 'sambutan'])->name('landing.sambutan');
 Route::get('/visi-misi', [\App\Http\Controllers\LandingController::class, 'visiMisi'])->name('landing.visi-misi');
 Route::get('/sotk', [\App\Http\Controllers\LandingController::class, 'sotk'])->name('landing.sotk');
+Route::get('/infografis', [\App\Http\Controllers\LandingController::class, 'infografis'])->name('landing.infografis');
 Route::post('/contact', [\App\Http\Controllers\LandingController::class, 'storeContact'])->name('landing.contact');
 
 Route::get('/dashboard', function () {

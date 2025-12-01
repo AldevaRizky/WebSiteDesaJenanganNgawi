@@ -201,4 +201,29 @@ class LandingController extends Controller
 
         return view('landing.sotk.index', compact('perangkat', 'bagan', 'heroBanner'));
     }
+
+    public function infografis()
+    {
+        // Fetch hero banner for header
+        $heroBanner = HeroBanner::first();
+
+        // Fetch data penduduk
+        $dataPenduduk = DataPenduduk::first();
+
+        // Calculate percentages
+        $data = null;
+        if ($dataPenduduk && $dataPenduduk->total_penduduk > 0) {
+            $data = [
+                'total_penduduk' => $dataPenduduk->total_penduduk,
+                'kepala_keluarga' => $dataPenduduk->kepala_keluarga,
+                'laki_laki' => $dataPenduduk->laki_laki,
+                'perempuan' => $dataPenduduk->perempuan,
+                'persentase_laki' => round(($dataPenduduk->laki_laki / $dataPenduduk->total_penduduk) * 100, 1),
+                'persentase_perempuan' => round(($dataPenduduk->perempuan / $dataPenduduk->total_penduduk) * 100, 1),
+                'rata_anggota_keluarga' => $dataPenduduk->kepala_keluarga > 0 ? round($dataPenduduk->total_penduduk / $dataPenduduk->kepala_keluarga, 1) : 0,
+            ];
+        }
+
+        return view('landing.infografis.index', compact('data', 'heroBanner'));
+    }
 }
