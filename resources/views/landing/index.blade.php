@@ -150,7 +150,7 @@
                         <div class="flex items-start text-gray-700 text-sm mb-3 justify-between">
                             <div class="flex items-start max-w-[70%]">
                                 <i class='bx bx-map-pin text-blue-500 text-lg mr-3 mt-0.5'></i>
-                                <div>
+                                <div class="text-left">
                                     <span class="block text-sm font-semibold text-gray-800">Alamat</span>
                                     <span class="block line-clamp-2 text-sm text-gray-700">{{ $item->alamat }}</span>
                                 </div>
